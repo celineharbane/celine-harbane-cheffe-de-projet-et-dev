@@ -1013,7 +1013,7 @@ html {
 
 <nav id="nav" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px); opacity: 1;">
   <a class="nav-logo magnetic" href="#">CH</a>
-  <div class="nav-links"><a href="#services" class="nav-link magnetic">Services</a><a href="#work" class="nav-link magnetic">Projets</a><a href="#processus" class="nav-link magnetic">Approche</a><a href="/blog/" class="nav-link magnetic">Blog</a><a href="#contact" class="nav-link magnetic">Contact</a></div>
+  <div class="nav-links"><a href="#services" class="nav-link magnetic">Services</a><a href="#shopify-plus" class="nav-link magnetic" style="color:#a78bfa">Shopify Plus</a><a href="#work" class="nav-link magnetic">Projets</a><a href="/blog/" class="nav-link magnetic">Blog</a><a href="#contact" class="nav-link magnetic">Contact</a></div>
 </nav>
 
 <main id="main-content">
@@ -1166,6 +1166,120 @@ html {
     </div>
   </div>
 </section>
+
+<style>
+.s-plus{padding:6rem 10vw;position:relative;z-index:10;background:linear-gradient(180deg,rgba(6,6,8,0) 0%,rgba(59,130,246,0.04) 50%,rgba(6,6,8,0) 100%)}
+.plus-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1rem;flex-wrap:wrap;gap:1.5rem}
+.plus-badge{display:inline-flex;align-items:center;gap:0.5rem;padding:0.4rem 1rem;border:1px solid rgba(139,92,246,0.4);border-radius:100px;background:rgba(139,92,246,0.08);font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:#a78bfa;font-weight:700;margin-bottom:1.5rem}
+.plus-intro{color:var(--muted);font-size:0.95rem;line-height:1.75;max-width:55ch;margin-bottom:3.5rem}
+.plus-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-bottom:4rem}
+.plus-card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.07);padding:1.75rem;position:relative;overflow:hidden;transition:border-color 0.3s,background 0.3s}
+.plus-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),#8b5cf6);transform:scaleX(0);transform-origin:left;transition:transform 0.4s cubic-bezier(0.23,1,0.32,1)}
+.plus-card:hover{border-color:rgba(139,92,246,0.3);background:rgba(139,92,246,0.04)}
+.plus-card:hover::before{transform:scaleX(1)}
+.plus-card-icon{font-size:1.4rem;margin-bottom:1rem}
+.plus-card-title{font-family:var(--font-display);font-size:1.05rem;letter-spacing:0.08em;color:var(--text);margin-bottom:0.75rem;text-transform:uppercase}
+.plus-card-desc{font-size:0.8rem;color:var(--muted);line-height:1.65;margin-bottom:1rem}
+.plus-card-tags{display:flex;flex-wrap:wrap;gap:0.35rem}
+.plus-card-tag{font-size:0.58rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.22rem 0.6rem;border:1px solid rgba(139,92,246,0.25);color:#a78bfa;border-radius:3px}
+.plus-cta{display:flex;align-items:center;gap:2rem;padding:2rem 2.5rem;border:1px solid rgba(139,92,246,0.3);background:rgba(139,92,246,0.06);flex-wrap:wrap}
+.plus-cta-text strong{display:block;font-family:var(--font-display);font-size:1.3rem;letter-spacing:0.05em;color:var(--text);margin-bottom:0.3rem}
+.plus-cta-text span{font-size:0.82rem;color:var(--muted)}
+.plus-cta-btn{flex-shrink:0;font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.7rem 1.6rem;background:linear-gradient(135deg,var(--accent),#8b5cf6);color:#fff;font-weight:700;text-decoration:none;transition:opacity 0.3s}
+.plus-cta-btn:hover{opacity:0.85}
+@media(max-width:900px){.plus-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.plus-grid{grid-template-columns:1fr}.plus-cta{flex-direction:column;align-items:flex-start}}
+</style>
+
+<section class="s-plus" id="shopify-plus" aria-label="Shopify Plus — Développements grands comptes" role="region">
+  <div class="plus-badge">✦ Shopify Plus</div>
+  <div class="plus-header">
+    <div>
+      <h2 class="section-title">Grands comptes &<br><span style="-webkit-text-stroke:1.5px #8b5cf6;color:transparent;">développements sur mesure.</span></h2>
+    </div>
+    <a class="btn-ghost magnetic" href="#contact">Discuter de votre projet →</a>
+  </div>
+  <p class="plus-intro">Pour les enseignes qui ont des besoins que Shopify standard ne couvre pas : checkout personnalisé, B2B avancé, intégrations ERP, automatisations complexes. Je développe ce que les agences facturent 3 fois plus cher.</p>
+
+  <div class="plus-grid">
+
+    <div class="plus-card">
+      <div class="plus-card-icon">🛒</div>
+      <div class="plus-card-title">Checkout personnalisé</div>
+      <div class="plus-card-desc">Exclusif Shopify Plus. Ajout de champs, conditions d'affichage des modes de livraison, upsell natif, règles métier sur mesure directement dans le tunnel d'achat.</div>
+      <div class="plus-card-tags">
+        <span class="plus-card-tag">Checkout Extensibility</span>
+        <span class="plus-card-tag">Checkout UI Extensions</span>
+        <span class="plus-card-tag">Functions</span>
+      </div>
+    </div>
+
+    <div class="plus-card">
+      <div class="plus-card-icon">🏢</div>
+      <div class="plus-card-title">B2B & Wholesale avancé</div>
+      <div class="plus-card-desc">Catalogues et prix par segment client, commandes minimum, espace revendeurs avec authentification, NET 30, approbation de commande manuelle.</div>
+      <div class="plus-card-tags">
+        <span class="plus-card-tag">Shopify B2B</span>
+        <span class="plus-card-tag">Company Locations</span>
+        <span class="plus-card-tag">Price Lists</span>
+      </div>
+    </div>
+
+    <div class="plus-card">
+      <div class="plus-card-icon">⚡</div>
+      <div class="plus-card-title">Automatisations Shopify Flow</div>
+      <div class="plus-card-desc">Tag VIP automatique selon CA, alertes stock → fournisseur, fraud scoring, relances panier abandonnée, gestion des retours et remboursements automatisés.</div>
+      <div class="plus-card-tags">
+        <span class="plus-card-tag">Shopify Flow</span>
+        <span class="plus-card-tag">Webhooks</span>
+        <span class="plus-card-tag">Metaobjects</span>
+      </div>
+    </div>
+
+    <div class="plus-card">
+      <div class="plus-card-icon">🌍</div>
+      <div class="plus-card-title">Multi-boutiques & internationalisation</div>
+      <div class="plus-card-desc">Une seule admin pour plusieurs pays. Multi-devises, multi-langues, règles fiscales par marché, stocks localisés. Shopify Markets configuré et optimisé.</div>
+      <div class="plus-card-tags">
+        <span class="plus-card-tag">Shopify Markets</span>
+        <span class="plus-card-tag">Multi-currency</span>
+        <span class="plus-card-tag">Expansion Stores</span>
+      </div>
+    </div>
+
+    <div class="plus-card">
+      <div class="plus-card-icon">🔗</div>
+      <div class="plus-card-title">Intégrations ERP / PIM</div>
+      <div class="plus-card-desc">Connexion bidirectionnelle avec Sage, Cegid, SAP, Akeneo. Sync des stocks, produits, clients et commandes en temps réel. Flux EDI fournisseurs automatisés.</div>
+      <div class="plus-card-tags">
+        <span class="plus-card-tag">API Shopify Admin</span>
+        <span class="plus-card-tag">Webhooks</span>
+        <span class="plus-card-tag">Middleware</span>
+      </div>
+    </div>
+
+    <div class="plus-card">
+      <div class="plus-card-icon">📊</div>
+      <div class="plus-card-title">Thèmes & expériences sur mesure</div>
+      <div class="plus-card-desc">Développement de sections Liquid custom, configurateur produit interactif, lookbook shoppable, quiz de recommandation — tout ce que les thèmes standards ne permettent pas.</div>
+      <div class="plus-card-tags">
+        <span class="plus-card-tag">Liquid</span>
+        <span class="plus-card-tag">Theme App Extensions</span>
+        <span class="plus-card-tag">Storefront API</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="plus-cta">
+    <div class="plus-cta-text">
+      <strong>Vous avez un besoin spécifique Shopify Plus ?</strong>
+      <span>Je réponds à toutes les demandes sur mesure — grands comptes, retail, mode, food, B2B.</span>
+    </div>
+    <a class="plus-cta-btn" href="https://wa.me/33666461363?text=Bonjour%20C%C3%A9line%2C%20j%27ai%20un%20besoin%20Shopify%20Plus" target="_blank">Discuter de mon besoin →</a>
+  </div>
+</section>
+
 <section id="processus" class="s-process" aria-label="Mon processus de travail" role="region">
   <div class="process-inner">
     <div class="process-header">
