@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Migration PrestaShop vers Shopify : guide complet 2025 | Céline Harbane</title>
+<meta name="description" content="Tout ce qu'il faut savoir pour réussir votre migration PrestaShop vers Shopify en 2025 : étapes, coûts, SEO, données. Guide complet par une experte Shopify.">
+<link rel="canonical" href="https://celine-harbane-cheffe-de-projet-et.vercel.app/blog/migration-prestashop-shopify.html">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<script type="application/ld+json">{"@type":"Article","headline":"Migration PrestaShop vers Shopify : guide complet 2025","author":{"@type":"Person","name":"Céline Harbane"},"publisher":{"@type":"Organization","name":"Céline Harbane"},"datePublished":"2025-01-15","inLanguage":"fr-FR"}</script>
+<style>
+:root{--bg:#060608;--text:#f0eeea;--muted:#8a8a9a;--accent:#3b82f6;--font-display:'Bebas Neue',sans-serif;--font-body:'DM Sans',sans-serif}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+nav{padding:1.5rem 6vw;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.06)}
+.nav-logo{font-family:var(--font-display);font-size:1.4rem;letter-spacing:0.35em;color:var(--text);text-decoration:none}
+.nav-links{display:flex;gap:2rem;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase}
+.nav-links a{color:var(--text)}.nav-links a:hover{color:var(--accent);text-decoration:none}
+.nav-cta{font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.55rem 1.2rem;border:1px solid rgba(59,130,246,0.5);color:var(--text);transition:background 0.3s}
+.nav-cta:hover{background:var(--accent);text-decoration:none}
+.article-wrap{max-width:760px;margin:0 auto;padding:4rem 2rem 6rem}
+.article-back{font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);display:inline-flex;align-items:center;gap:0.4rem;margin-bottom:2.5rem;text-decoration:none}
+.article-back:hover{color:var(--accent);text-decoration:none}
+.article-tag{font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);line-height:1;letter-spacing:0.02em;margin-bottom:1.5rem}
+.article-meta{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.07);margin-bottom:2.5rem}
+.article-intro{font-size:1.1rem;color:rgba(255,255,255,0.8);line-height:1.75;margin-bottom:2.5rem;font-weight:300}
+h2{font-family:var(--font-display);font-size:1.8rem;letter-spacing:0.04em;margin:2.5rem 0 1rem;color:var(--text)}
+h3{font-size:1rem;font-weight:700;margin:1.75rem 0 0.75rem;color:var(--text)}
+p{color:var(--muted);line-height:1.8;margin-bottom:1.25rem}
+ul,ol{color:var(--muted);line-height:1.8;margin-bottom:1.25rem;padding-left:1.5rem}
+li{margin-bottom:0.4rem}
+.highlight-box{background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.25);padding:1.5rem 2rem;border-radius:4px;margin:2rem 0}
+.highlight-box p{color:rgba(255,255,255,0.75);margin:0}
+.warning-box{background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.25);padding:1.5rem 2rem;border-radius:4px;margin:2rem 0}
+.warning-box p{color:rgba(255,255,255,0.75);margin:0}
+.cta-box{background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.35);padding:2.5rem;border-radius:4px;margin:3rem 0;text-align:center}
+.cta-box h3{font-family:var(--font-display);font-size:1.6rem;color:var(--text);margin:0 0 0.75rem}
+.cta-box p{color:rgba(255,255,255,0.65);margin-bottom:1.5rem}
+.cta-btn{display:inline-block;background:var(--accent);color:#fff;padding:0.75rem 2rem;font-size:0.82rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:700;transition:background 0.3s;text-decoration:none}
+.cta-btn:hover{background:#2563eb;text-decoration:none}
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:0.85rem}
+th{background:rgba(255,255,255,0.06);color:var(--text);font-weight:700;padding:0.75rem 1rem;text-align:left;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase}
+td{padding:0.75rem 1rem;border-bottom:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+tr:hover td{background:rgba(255,255,255,0.02)}
+.breadcrumb{font-size:0.72rem;color:var(--muted);padding:1rem 6vw;letter-spacing:0.05em}
+.breadcrumb a{color:var(--muted)}.breadcrumb a:hover{color:var(--accent);text-decoration:none}
+@media(max-width:600px){.nav-links{display:none}.article-wrap{padding:2rem 1.25rem 4rem}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">CH</a>
+  <div class="nav-links">
+    <a href="/#services">Services</a>
+    <a href="/#work">Projets</a>
+    <a href="/blog/">Blog</a>
+    <a href="/#contact">Contact</a>
+  </div>
+  <a class="nav-cta" href="https://wa.me/33666461363?text=Bonjour%20C%C3%A9line" target="_blank">Devis gratuit</a>
+</nav>
+<div class="breadcrumb"><a href="/">Accueil</a> › <a href="/blog/">Blog</a> › Migration PrestaShop vers Shopify</div>
+
+<div class="article-wrap">
+  <a class="article-back" href="/blog/">← Retour au blog</a>
+  <div class="article-tag">PrestaShop · Migration</div>
+  <h1>MIGRATION PRESTASHOP VERS SHOPIFY : GUIDE COMPLET 2025</h1>
+  <div class="article-meta">Par Céline Harbane · Chef de projet & Dev Shopify · 8 min de lecture</div>
+
+  <p class="article-intro">Votre boutique PrestaShop tombe en panne. Vos mises à jour coûtent des fortunes. Votre développeur est injoignable le vendredi soir. Si vous vous reconnaissez, ce guide est fait pour vous. Je vous explique comment migrer vers Shopify sans perdre une seule donnée ni une position Google.</p>
+
+  <h2>POURQUOI MIGRER DE PRESTASHOP VERS SHOPIFY ?</h2>
+  <p>PrestaShop est une solution open source puissante — en théorie. En pratique, pour une PME sans équipe technique dédiée, elle devient rapidement un gouffre financier et une source de stress permanent.</p>
+  <p>Voici ce que vivent la plupart de mes clients avant de me contacter :</p>
+  <ul>
+    <li>Des pannes inexpliquées après chaque mise à jour</li>
+    <li>Des modules payants qui s'accumulent (50€, 100€, 200€ par module)</li>
+    <li>Une facture de développeur qui ne correspond jamais à ce qui était prévu</li>
+    <li>Un site lent qui fait fuir les clients (et pénalise le SEO)</li>
+    <li>Une interface back-office complexe que vous n'utilisez qu'à 20%</li>
+  </ul>
+
+  <div class="highlight-box"><p>💡 <strong>Le chiffre qui fait réfléchir :</strong> une boutique PrestaShop coûte en moyenne 4 000 à 12 000€/an en maintenance, modules et développement. Shopify, c'est 29 à 299€/mois tout compris.</p></div>
+
+  <h2>LES ÉTAPES D'UNE MIGRATION PRESTASHOP → SHOPIFY</h2>
+
+  <h3>1. Audit de l'existant (semaine 1)</h3>
+  <p>Avant de migrer quoi que ce soit, on fait l'inventaire complet : nombre de produits, de clients, de commandes, de pages de contenu, de modules actifs. C'est aussi à cette étape qu'on identifie les fonctionnalités critiques à reproduire sur Shopify.</p>
+
+  <h3>2. Transfert des données (semaines 1-2)</h3>
+  <p>On exporte et importe dans l'ordre : produits (avec variantes, images, métadonnées), clients, historique de commandes. Des outils comme Matrixify permettent d'automatiser une grande partie du processus pour les gros catalogues.</p>
+
+  <h3>3. Configuration Shopify (semaines 2-3)</h3>
+  <p>Thème, paiements, livraison, taxes, apps. C'est ici qu'on reconstitue les fonctionnalités de votre PrestaShop sur Shopify — souvent plus simplement et moins chèrement.</p>
+
+  <h3>4. Redirections SEO (semaine 3)</h3>
+  <p>Étape cruciale. Chaque URL de votre ancien site doit être redirigée (301) vers son équivalent sur Shopify. Une URL non redirigée = une position Google perdue.</p>
+
+  <h3>5. Recette et tests (semaine 4)</h3>
+  <p>On teste tout : tunnel d'achat, paiements, emails automatiques, stock, mobile. Rien ne doit passer en live sans validation complète.</p>
+
+  <h3>6. Bascule DNS et mise en ligne</h3>
+  <p>La bascule se fait en quelques minutes. On planifie ça sur un créneau de faible trafic (dimanche matin par exemple) pour minimiser l'impact.</p>
+
+  <div class="warning-box"><p>⚠️ <strong>Erreur fréquente :</strong> basculer sans avoir vérifié toutes les redirections. Résultat : des centaines d'erreurs 404, une chute de trafic organique, et des semaines de rattrapage SEO.</p></div>
+
+  <h2>COMBIEN DE TEMPS PREND UNE MIGRATION PRESTASHOP VERS SHOPIFY ?</h2>
+  <table>
+    <tr><th>Taille du catalogue</th><th>Durée estimée</th><th>Complexité</th></tr>
+    <tr><td>Moins de 100 produits</td><td>2 à 3 semaines</td><td>Faible</td></tr>
+    <tr><td>100 à 500 produits</td><td>4 à 6 semaines</td><td>Moyenne</td></tr>
+    <tr><td>500+ produits</td><td>6 à 10 semaines</td><td>Élevée</td></tr>
+    <tr><td>B2B + fonctions spécifiques</td><td>8 à 12 semaines</td><td>Très élevée</td></tr>
+  </table>
+
+  <h2>CE QUE VOUS GAGNEZ APRÈS LA MIGRATION</h2>
+  <ul>
+    <li><strong>Zéro maintenance serveur</strong> — Shopify gère tout l'hébergement et la sécurité</li>
+    <li><strong>Mises à jour automatiques</strong> — plus jamais de "la mise à jour a cassé votre site"</li>
+    <li><strong>Interface simple</strong> — votre équipe peut gérer les produits sans formation</li>
+    <li><strong>Performance</strong> — Shopify est optimisé pour le e-commerce, votre site sera plus rapide</li>
+    <li><strong>Écosystème d'apps</strong> — des milliers d'intégrations fiables (Klaviyo, Judge.me, ReConvert…)</li>
+  </ul>
+
+  <h2>ET LE SEO ? JE VAIS PERDRE MES POSITIONS ?</h2>
+  <p>C'est la question que tout le monde me pose. La réponse : <strong>non, si la migration est bien faite.</strong> Avec un plan de redirections complet et rigoureux, vos positions Google sont préservées. J'ai migré des boutiques avec 500+ URLs sans aucune perte de trafic organique.</p>
+  <p>La clé : mapper chaque ancienne URL vers sa nouvelle adresse Shopify, et soumettre le nouveau sitemap à Google Search Console dès la mise en ligne.</p>
+
+  <div class="cta-box">
+    <h3>VOTRE PRESTASHOP VOUS POSE PROBLÈME ?</h3>
+    <p>Je réalise gratuitement un audit de votre boutique actuelle et vous propose un plan de migration concret sous 48h.</p>
+    <a class="cta-btn" href="https://wa.me/33666461363?text=Bonjour%20C%C3%A9line%2C%20je%20veux%20migrer%20de%20PrestaShop%20vers%20Shopify" target="_blank">Demander mon audit gratuit →</a>
+  </div>
+</div>
+
+<footer style="padding:2rem 6vw;border-top:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+  <p style="color:var(--muted);font-size:0.78rem">© 2025 Céline Harbane — CDP & Dev Shopify · Paris</p>
+  <a href="/blog/" style="color:var(--accent);font-size:0.78rem">← Retour au blog</a>
+</footer>
+</body>
+</html>
