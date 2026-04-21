@@ -5,8 +5,6 @@
 <title>Céline Harbane — Dev Shopify &amp; Chef de Projet Digital | PME · Paris</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&amp;display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FontLoader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/geometries/TextGeometry.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 <style>
@@ -1418,8 +1416,13 @@ const rim=new THREE.PointLight(0x3b82f6,1.5,15); rim.position.set(2,4,-5); scene
 
 const mainGroup=new THREE.Group(); scene.add(mainGroup);
 
-const glassMat=new THREE.MeshPhysicalMaterial({color:0x0a0a1a,metalness:0.05,roughness:0.0,transmission:0.55,thickness:3,ior:1.9,clearcoat:1,clearcoatRoughness:0.0,envMapIntensity:2});
+const knotGeo=new THREE.TorusKnotGeometry(1.1,0.32,180,24,2,3);
+const knotMat=new THREE.MeshPhysicalMaterial({color:0x0a0a1a,metalness:0.05,roughness:0.0,transmission:0.55,thickness:3,ior:1.9,clearcoat:1,clearcoatRoughness:0.0,envMapIntensity:2});
+mainGroup.add(new THREE.Mesh(knotGeo,knotMat));
+
+const wireGeo=new THREE.TorusKnotGeometry(1.12,0.33,80,12,2,3);
 const wireMat=new THREE.MeshBasicMaterial({color:0x3b82f6,wireframe:true,transparent:true,opacity:0.07});
+mainGroup.add(new THREE.Mesh(wireGeo,wireMat));
 
 const isMobile=window.innerWidth<=768;
 const pCount=isMobile?300:1600;
@@ -1437,22 +1440,8 @@ pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
 const particles=new THREE.Points(pGeo,new THREE.PointsMaterial({color:0x3b82f6,size:0.022,transparent:true,opacity:0.4,blending:THREE.AdditiveBlending,depthWrite:false}));
 mainGroup.add(particles);
 
-let chMesh=null, chWire=null;
-
-const fontLoader=new THREE.FontLoader();
-fontLoader.load('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/fonts/helvetiker_bold.typeface.json',function(font){
-  function makeTextGeo(size,height,curveSegs,bevelSegs){
-    const g=new THREE.TextGeometry('CH',{font,size,height,curveSegments:curveSegs,bevelEnabled:true,bevelThickness:0.05,bevelSize:0.03,bevelSegments:bevelSegs});
-    g.computeBoundingBox();
-    const c=g.boundingBox.getCenter(new THREE.Vector3());
-    g.translate(-c.x,-c.y,-c.z);
-    return g;
-  }
-  chMesh=new THREE.Mesh(makeTextGeo(1.4,0.38,28,12),glassMat);
-  chWire=new THREE.Mesh(makeTextGeo(1.41,0.39,14,6),wireMat);
-  mainGroup.add(chMesh);
-  mainGroup.add(chWire);
-});
+const knotMesh=mainGroup.children[0];
+const wireMesh=mainGroup.children[1];
 
 window.addEventListener('resize',()=>{
   camera.aspect=window.innerWidth/window.innerHeight;
@@ -1472,8 +1461,8 @@ function animate(){
   tmx+=(mx-tmx)*0.04; tmy+=(my-tmy)*0.04;
   mainGroup.rotation.y+=(tmx*0.25-mainGroup.rotation.y)*0.05;
   mainGroup.rotation.x+=(-tmy*0.12-mainGroup.rotation.x)*0.05;
-  if(chMesh){chMesh.rotation.y+=0.003;chMesh.rotation.z+=0.0008;}
-  if(chWire){chWire.rotation.y+=0.003;chWire.rotation.z+=0.0008;}
+  knotMesh.rotation.y+=0.003; knotMesh.rotation.z+=0.001;
+  wireMesh.rotation.y+=0.003; wireMesh.rotation.z+=0.001;
   mainGroup.position.y=Math.sin(time*0.7)*0.09;
   particles.rotation.y+=0.0006;
   particles.rotation.x=Math.sin(time*0.2)*0.04;
