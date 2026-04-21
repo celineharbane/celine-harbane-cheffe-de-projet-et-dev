@@ -1071,6 +1071,33 @@ html {
     </div>
   </section>
 
+<!-- ── SHOWREEL VIDEO ── -->
+<style>
+.s-video{position:relative;z-index:10;background:#000;overflow:hidden}
+.s-video video{width:100%;display:block;max-height:90vh;object-fit:cover}
+.s-video-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:4rem 10vw;background:linear-gradient(to top,rgba(6,6,8,0.85) 0%,rgba(6,6,8,0.2) 50%,transparent 100%);pointer-events:none}
+.s-video-tag{font-size:0.65rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--accent);margin-bottom:0.75rem;display:flex;align-items:center;gap:0.75rem}
+.s-video-tag::before{content:'';display:block;width:20px;height:1px;background:var(--accent)}
+.s-video-title{font-family:var(--font-display);font-size:clamp(2rem,5vw,4.5rem);line-height:1;letter-spacing:0.02em;color:#fff;text-shadow:0 2px 30px rgba(0,0,0,0.8)}
+.s-video-sub{font-size:0.9rem;color:rgba(255,255,255,0.6);margin-top:0.75rem;letter-spacing:0.05em}
+.s-video-mute{position:absolute;bottom:2rem;right:2rem;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.1);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.3s;pointer-events:all;z-index:2}
+.s-video-mute:hover{background:rgba(255,255,255,0.2)}
+.s-video-mute svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:1.5;stroke-linecap:round}
+</style>
+
+<section class="s-video" aria-label="Showreel — Céline Harbane en action">
+  <video id="showreelVideo" autoplay muted loop playsinline poster="">
+    <source src="/videos/showreel.mp4" type="video/mp4">
+  </video>
+  <div class="s-video-overlay">
+    <div class="s-video-tag">— Showreel</div>
+    <div class="s-video-title">DEV · CDP · WEBDESIGNER<br>EN ACTION.</div>
+    <div class="s-video-sub">Migration Shopify · Pilotage projet · UI Design</div>
+  </div>
+  <button class="s-video-mute" id="muteBtn" aria-label="Activer/couper le son" onclick="(function(){const v=document.getElementById('showreelVideo');const b=document.getElementById('muteBtn');v.muted=!v.muted;b.innerHTML=v.muted?'<svg viewBox=\'0 0 24 24\'><path d=\'M11 5L6 9H2v6h4l5 4V5z\'/><path d=\'M23 9l-6 6M17 9l6 6\' stroke=\'#fff\'/></svg>':'<svg viewBox=\'0 0 24 24\'><path d=\'M11 5L6 9H2v6h4l5 4V5z\'/><path d=\'M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14\' stroke=\'#fff\'/></svg>';})()">
+    <svg viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14" stroke="#fff"/></svg>
+  </button>
+</section>
 
 <section id="services" class="s-services" aria-label="Services de développement web et pilotage de projet" role="region">
   <div class="services-inner">
