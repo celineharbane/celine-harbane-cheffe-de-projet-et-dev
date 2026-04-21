@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="fr"><head>
+<meta charset="UTF-8">
+
+<title>Céline Harbane — Dev Shopify &amp; Chef de Projet Digital | PME · Paris</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&amp;display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+  :root {
+    --bg:      #060608;
+    --text:    #f0eeea;      /* ratio ~17:1 sur --bg ✅ */
+    --muted:   #8a8a9a;      /* ratio ~4.6:1 sur --bg ✅ WCAG AA */
+    --accent:  #3b82f6;      /* ratio 4.7:1 sur --bg ✅ */
+    --accent2: #8b5cf6;
+    --accent-rgb: 59,130,246;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body:    'DM Sans', sans-serif;
+  }
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* LOADER */
+  #loader {
+    position:fixed; inset:0; background:var(--bg);
+    z-index:10000; display:flex; align-items:center;
+    justify-content:center; flex-direction:column;
+    transition:opacity 0.7s ease;
+  }
+  .loader-brand {
+    font-family:var(--font-display);
+    font-size:clamp(2rem,5vw,3.5rem);
+    letter-spacing:0.5em; color:var(--text);
+    margin-bottom:2.5rem;
+    opacity:0; animation:fadeIn 0.6s 0.3s forwards;
+  }
+  .loader-bar-wrap { width:180px; height:1px; background:rgba(255,255,255,0.08); position:relative; overflow:hidden; }
+  .loader-bar { position:absolute; left:0; top:0; height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent2)); transition:width 0.12s linear; }
+  .loader-pct { margin-top:1rem; font-size:0.75rem; letter-spacing:0.3em; color:var(--muted); opacity:0; animation:fadeIn 0.6s 0.5s forwards; }
+  @keyframes fadeIn { to { opacity:1; } }
+
+  /* CANVAS */
+  #canvas-wrap { position:fixed; inset:0; z-index:0; pointer-events:none; }
+  #three-canvas { width:100%; height:100%; display:block; }
+
+  /* ATMOSPHERE */
+  .orb { position:fixed; border-radius:50%; filter:blur(130px); pointer-events:none; z-index:1; animation:orbFloat 18s ease-in-out infinite alternate; }
+  .orb-1 { width:700px; height:700px; background:var(--accent); opacity:0.06; top:-25%; right:-15%; }
+  .orb-2 { width:550px; height:550px; background:var(--accent2); opacity:0.05; bottom:-20%; left:-10%; animation-delay:-9s; }
+  @keyframes orbFloat { from { transform:translate(0,0) scale(1); } to { transform:translate(40px,-40px) scale(1.08); } }
+  .grain { position:fixed; inset:0; z-index:5; pointer-events:none; opacity:0.025; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .deco-line { position:fixed; width:1px; background:linear-gradient(to bottom,transparent,rgba(var(--accent-rgb),0.25),transparent); pointer-events:none; z-index:2; top:0; height:100vh; }
+  .deco-l { left:5vw; } .deco-r { right:5vw; }
+
+  /* CURSOR */
+  #cursor { position:fixed; width:10px; height:10px; background:var(--accent); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width 0.25s,height 0.25s,background 0.25s; mix-blend-mode:screen; }
+  #cursor.big { width:44px; height:44px; background:transparent; border:1px solid var(--accent); }
+
+  /* NAV — gradient fond pour lisibilité sur canvas */
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; padding:1.8rem 5vw; display:flex; align-items:center; justify-content:space-between; opacity:0; transform:translateY(-20px); background:linear-gradient(to bottom,rgba(6,6,8,0.88) 0%,transparent 100%); }
+  .nav-logo { font-family:var(--font-display); font-size:1.4rem; letter-spacing:0.35em; color:var(--text); text-decoration:none; }
+  .nav-links { display:flex; gap:2.5rem; align-items:center; }
+  .nav-link { position:relative; font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text); text-decoration:none; overflow:hidden; display:inline-block; }
+  .nav-link span { display:block; transition:transform 0.35s cubic-bezier(0.76,0,0.24,1); }
+  .nav-link::after { content:attr(data-label); position:absolute; top:100%; left:0; color:var(--accent); transition:transform 0.35s cubic-bezier(0.76,0,0.24,1); white-space:nowrap; }
+  .nav-link:hover span { transform:translateY(-100%); }
+  .nav-link:hover::after { transform:translateY(-100%); }
+  .nav-cta { font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; padding:0.6rem 1.4rem; border:1px solid rgba(var(--accent-rgb),0.5); color:var(--text); text-decoration:none; transition:background 0.3s,color 0.3s,border-color 0.3s; }
+  .nav-cta:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+  main { position:relative; z-index:10; }
+
+  /* ── HERO ── */
+  .s-hero { min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding:0 10vw; position:relative; }
+  /* TECHNIQUE C — gradient radial de protection */
+  .s-hero::before {
+    content:''; position:absolute; inset:0;
+    background:radial-gradient(ellipse 85% 80% at 25% 55%, rgba(6,6,8,0.75) 0%, rgba(6,6,8,0.3) 50%, transparent 75%);
+    pointer-events:none; z-index:0;
+  }
+  .s-hero > * { position:relative; z-index:1; }
+  .hero-pre { font-size:0.7rem; letter-spacing:0.4em; text-transform:uppercase; color:var(--accent); margin-bottom:1.5rem; display:flex; align-items:center; gap:1rem; opacity:0; transform:translateY(20px); }
+  .hero-pre::before { content:''; display:block; width:30px; height:1px; background:var(--accent); }
+  .hero-title {
+    font-family:var(--font-display);
+    font-size:clamp(4rem,12vw,11rem);
+    line-height:0.9; letter-spacing:-0.01em; color:var(--text);
+    /* TECHNIQUE A — text-shadow protection */
+    text-shadow: 0 0 60px rgba(0,0,0,0.95), 0 4px 30px rgba(0,0,0,0.85), 0 0 120px rgba(6,6,8,0.7);
+  }
+  .hero-title .line { display:block; overflow:hidden; transform:translateY(110%); }
+  .hero-title .outline { color:transparent; -webkit-text-stroke:1.5px rgba(var(--accent-rgb),0.65); text-shadow:0 0 40px rgba(var(--accent-rgb),0.2); }
+  .hero-sub { margin-top:2.5rem; max-width:400px; font-size:1rem; line-height:1.75; color:var(--muted); text-shadow:0 1px 10px rgba(0,0,0,0.95); opacity:0; transform:translateY(20px); }
+  .hero-cta-wrap { margin-top:3rem; display:flex; align-items:center; gap:2rem; opacity:0; transform:translateY(20px); }
+  .btn-primary { padding:0.9rem 2.4rem; background:var(--accent); color:#fff; font-family:var(--font-body); font-weight:500; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; text-decoration:none; transition:transform 0.3s,box-shadow 0.3s; }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 12px 40px rgba(var(--accent-rgb),0.4); }
+  .btn-ghost { font-size:0.85rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text); text-decoration:none; display:flex; align-items:center; gap:0.6rem; transition:color 0.3s; text-shadow:0 1px 10px rgba(0,0,0,0.95); }
+  .btn-ghost::after { content:'↓'; color:var(--accent); }
+  .btn-ghost:hover { color:var(--accent); }
+  .scroll-ind { position:absolute; bottom:2.5rem; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:0.5rem; opacity:0; }
+  .scroll-ind span { font-size:0.6rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--muted); }
+  .scroll-line { width:1px; height:50px; background:linear-gradient(to bottom,var(--accent),transparent); animation:scrollPulse 2s ease-in-out infinite; }
+  @keyframes scrollPulse { 0%,100% { transform:scaleY(1); opacity:0.6; } 50% { transform:scaleY(0.6); opacity:1; } }
+
+  /* ── ABOUT — TECHNIQUE D fond semi-opaque ── */
+  .s-about { min-height:100vh; display:flex; align-items:center; gap:8vw; padding:6rem 10vw; position:relative; }
+  .s-about::before { content:''; position:absolute; inset:0; background:rgba(6,6,8,0.80); backdrop-filter:blur(2px); pointer-events:none; z-index:0; }
+  .s-about > * { position:relative; z-index:1; }
+  .about-left { flex:1; }
+  .about-right { flex:0 0 36%; }
+  .section-tag { font-size:0.65rem; letter-spacing:0.4em; text-transform:uppercase; color:var(--accent); margin-bottom:1.5rem; display:flex; align-items:center; gap:0.8rem; }
+  .section-tag::before { content:''; display:block; width:20px; height:1px; background:var(--accent); }
+  .section-title { font-family:var(--font-display); font-size:clamp(2.5rem,5vw,4.5rem); line-height:1; letter-spacing:0.02em; color:var(--text); margin-bottom:2rem; }
+  .section-body { font-size:1rem; line-height:1.8; color:var(--muted); max-width:420px; }
+  .stats { margin-top:3rem; display:flex; gap:3rem; }
+  .stat-num { font-family:var(--font-display); font-size:clamp(2rem,4vw,3rem); color:var(--accent); line-height:1; }
+  .stat-lbl { font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-top:0.3rem; }
+  .about-visual { width:100%; aspect-ratio:4/5; border:1px solid rgba(var(--accent-rgb),0.15); position:relative; overflow:hidden; background:rgba(var(--accent-rgb),0.04); }
+  .about-visual::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(var(--accent-rgb),0.09) 0%,transparent 60%); }
+  .about-label { position:absolute; bottom:1.5rem; left:1.5rem; font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--muted); }
+
+  /* ── WORK — TECHNIQUE D ── */
+  .s-work { min-height:100vh; display:flex; flex-direction:column; align-items:flex-start; padding:6rem 10vw; position:relative; }
+  .s-work::before { content:''; position:absolute; inset:0; background:rgba(6,6,8,0.75); pointer-events:none; z-index:0; }
+  .s-work > * { position:relative; z-index:1; }
+  .work-header { margin-bottom:4rem; width:100%; display:flex; justify-content:space-between; align-items:flex-end; }
+  .work-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; width:100%; }
+  .work-card { aspect-ratio:3/4; background:rgba(255,255,255,0.025); border:1px solid rgba(255,255,255,0.07); position:relative; overflow:hidden; cursor:none; transition:border-color 0.4s; }
+  .work-card:hover { border-color:rgba(var(--accent-rgb),0.35); }
+  .work-card-bg { position:absolute; inset:0; background:linear-gradient(135deg,rgba(var(--accent-rgb),0.07) 0%,rgba(139,92,246,0.07) 100%); opacity:0; transition:opacity 0.4s; }
+  .work-card:hover .work-card-bg { opacity:1; }
+  .work-card-num { position:absolute; top:1.5rem; right:1.5rem; font-family:var(--font-display); font-size:0.8rem; letter-spacing:0.2em; color:var(--muted); }
+  /* gradient scrim sous le texte de card */
+  .work-card-info { position:absolute; bottom:0; left:0; right:0; padding:3.5rem 1.5rem 1.5rem; background:linear-gradient(to top,rgba(6,6,8,0.95) 0%,transparent 100%); }
+  .work-card-cat { font-size:0.65rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--accent); margin-bottom:0.5rem; }
+  .work-card-title { font-family:var(--font-display); font-size:clamp(1.2rem,2vw,1.6rem); letter-spacing:0.05em; color:var(--text); }
+  .work-card-line { position:absolute; bottom:0; left:0; width:0; height:2px; background:var(--accent); transition:width 0.5s cubic-bezier(0.76,0,0.24,1); }
+  .work-card:hover .work-card-line { width:100%; }
+
+  /* ── CONTACT — TECHNIQUE B backdrop-blur ── */
+  .s-contact { min-height:100vh; display:flex; flex-direction:column; align-items:center; text-align:center; justify-content:center; padding:6rem 10vw; position:relative; }
+  .s-contact::before { content:''; position:absolute; inset:0; background:rgba(6,6,8,0.68); backdrop-filter:blur(5px); pointer-events:none; z-index:0; }
+  .s-contact > * { position:relative; z-index:1; }
+  .contact-title { font-family:var(--font-display); font-size:clamp(3rem,8vw,8rem); line-height:0.95; letter-spacing:0.02em; color:var(--text); margin-bottom:2rem; text-shadow:0 0 80px rgba(0,0,0,0.8); }
+  .contact-title .outline { color:transparent; -webkit-text-stroke:1.5px rgba(var(--accent-rgb),0.55); }
+  .contact-sub { font-size:1rem; line-height:1.75; color:var(--muted); margin-bottom:3rem; max-width:400px; }
+  .contact-email { font-family:var(--font-display); font-size:clamp(1.2rem,3vw,2rem); letter-spacing:0.15em; color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(var(--accent-rgb),0.35); padding-bottom:0.3rem; transition:border-color 0.3s,color 0.3s; }
+  .contact-email:hover { border-color:var(--accent); color:#fff; }
+
+  /* FOOTER */
+  footer { position:relative; z-index:10; padding:2rem 5vw; border-top:1px solid rgba(255,255,255,0.06); display:flex; justify-content:space-between; align-items:center; background:rgba(6,6,8,0.97); color:var(--muted); font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; }
+
+  @media (max-width:768px) {
+    .s-about { flex-direction:column; gap:2rem; }
+    .about-right { display:none; }
+    .work-grid { grid-template-columns:1fr; }
+    .nav-links .nav-link { display:none; }
+    .work-header { flex-direction:column; align-items:flex-start; gap:1rem; }
+    .stats { gap:2rem; }
+  }
+</style>
+<style id="claude-agent-animation-styles">
+      @keyframes claude-pulse {
+        0% {
+          box-shadow: 
+            inset 0 0 10px rgba(217, 119, 87, 0.5),
+            inset 0 0 20px rgba(217, 119, 87, 0.3),
+            inset 0 0 30px rgba(217, 119, 87, 0.1);
+        }
+        50% {
+          box-shadow: 
+            inset 0 0 15px rgba(217, 119, 87, 0.7),
+            inset 0 0 25px rgba(217, 119, 87, 0.5),
+            inset 0 0 35px rgba(217, 119, 87, 0.2);
+        }
+        100% {
+          box-shadow: 
+            inset 0 0 10px rgba(217, 119, 87, 0.5),
+            inset 0 0 20px rgba(217, 119, 87, 0.3),
+            inset 0 0 30px rgba(217, 119, 87, 0.1);
+        }
+      }
+    </style><meta name="description" content="Céline Harbane, développeuse Shopify et cheffe de projet digital à Paris. Je crée et migre les boutiques e-commerce des PME vers Shopify : sur mesure, SEO, livré dans les délais. Devis gratuit."><meta name="keywords" content="développeuse Shopify Paris, migration Shopify PME, chef de projet e-commerce, boutique Shopify sur mesure, migration WooCommerce Shopify, migration PrestaShop Shopify, Shopify freelance Paris"><meta name="author" content="Céline Harbane"><meta name="robots" content="index, follow"><meta name="theme-color" content="#0a0a0f"><meta property="og:title" content="Céline Harbane — Shopify &amp; Chef de Projet pour PME | Paris"><meta property="og:description" content="Je lance et migre les boutiques Shopify des PME. CDP + Dev en une seule personne. Devis gratuit en 48h."><meta property="og:type" content="website"><meta property="og:locale" content="fr_FR"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Céline Harbane — CDP &amp; Dev Web Paris"><meta name="twitter:description" content="Votre projet web piloté de A à Z. Cheffe de projet + développeuse = une seule interlocutrice, zéro friction."><link rel="canonical" href="https://celineharbane.fr"><link rel="preconnect" href="https://fonts.googleapis.com"><style id="ch-custom-styles">
+/* ============================================
+   RESET & BASE IMPROVEMENTS
+   ============================================ */
+:root {
+  --accent: #4B7BF5;
+  --accent-glow: rgba(75,123,245,0.25);
+  --white: #fff;
+  --muted: rgba(255,255,255,0.5);
+  --border: rgba(255,255,255,0.08);
+  --card-bg: rgba(255,255,255,0.03);
+  --card-bg-hover: rgba(75,123,245,0.08);
+  --radius: 16px;
+  --gap: clamp(1.5rem, 4vw, 3rem);
+}
+
+/* Fix hero-pre */
+.hero-pre { 
+  font-size: clamp(0.7rem, 1.5vw, 0.85rem) !important;
+  letter-spacing: 0.15em !important;
+  color: var(--accent) !important;
+  font-weight: 500;
+}
+
+/* Fix outline class */
+.outline-text {
+  -webkit-text-stroke: 1.5px var(--accent);
+  color: transparent;
+  display: inline-block;
+}
+
+/* ============================================
+   SECTION COMMUNE
+   ============================================ */
+.s-services,
+.s-process,
+.s-testimonials {
+  position: relative;
+  padding: clamp(5rem, 12vw, 10rem) clamp(1.5rem, 6vw, 5rem);
+  background: transparent;
+  overflow: hidden;
+}
+
+.section-tag {
+  font-size: 0.75rem !important;
+  letter-spacing: 0.2em !important;
+  color: var(--accent) !important;
+  text-transform: uppercase !important;
+  margin-bottom: 1.5rem !important;
+  font-weight: 500 !important;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ============================================
+   SECTION SERVICES
+   ============================================ */
+.services-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.services-header {
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.services-header .section-title {
+  font-size: clamp(2rem, 5vw, 3.5rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+  color: var(--white) !important;
+  text-transform: none !important;
+  letter-spacing: -0.02em !important;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.service-card {
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+}
+
+.service-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 0%, var(--accent-glow) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.service-card:hover {
+  border-color: rgba(75,123,245,0.4);
+  transform: translateY(-6px);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.3), 0 0 60px var(--accent-glow);
+}
+
+.service-card:hover::before {
+  opacity: 1;
+}
+
+.service-card.featured {
+  border-color: rgba(75,123,245,0.5);
+  background: rgba(75,123,245,0.06);
+  grid-column: span 1;
+}
+
+.service-card.featured::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.service-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.8rem;
+  background: var(--accent);
+  color: var(--white);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  border-radius: 100px;
+  margin-bottom: 1.25rem;
+}
+
+.service-badge::before {
+  content: '★';
+  font-size: 0.6rem;
+}
+
+.service-icon {
+  width: 52px;
+  height: 52px;
+  background: rgba(75,123,245,0.1);
+  border: 1px solid rgba(75,123,245,0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.service-num {
+  font-size: 0.7rem;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  font-family: 'Courier New', monospace;
+}
+
+.service-title {
+  font-size: clamp(1rem, 2vw, 1.2rem) !important;
+  font-weight: 700 !important;
+  color: var(--white) !important;
+  margin: 0 0 1rem !important;
+  line-height: 1.3 !important;
+  text-transform: none !important;
+  letter-spacing: -0.01em !important;
+}
+
+.service-problem {
+  font-size: 0.82rem !important;
+  color: rgba(255,255,255,0.45) !important;
+  margin: 0 0 1rem !important;
+  line-height: 1.5 !important;
+  font-style: italic;
+}
+
+.service-solution {
+  font-size: 0.9rem !important;
+  color: rgba(255,255,255,0.75) !important;
+  margin: 0 0 1.5rem !important;
+  line-height: 1.7 !important;
+}
+
+.service-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
+}
+
+.service-tags li {
+  padding: 0.3rem 0.8rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.05em;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.service-tags li:hover {
+  background: rgba(75,123,245,0.15);
+  border-color: rgba(75,123,245,0.4);
+  color: var(--white);
+}
+
+.services-cta-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.services-cta-hint {
+  font-size: 0.8rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
+   SECTION PROCESSUS
+   ============================================ */
+.process-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.process-header {
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.process-header .section-title {
+  font-size: clamp(2rem, 5vw, 3.5rem) !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+  color: var(--white) !important;
+  text-transform: none !important;
+  letter-spacing: -0.02em !important;
+}
+
+.process-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.process-step {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 0 2rem;
+  position: relative;
+}
+
+.step-num {
+  font-size: 0.75rem;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  font-weight: 800;
+  font-family: 'Courier New', monospace;
+  padding-top: 0.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.step-num::before {
+  content: '';
+  position: absolute;
+  top: 1.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: calc(100% + 1rem);
+  background: linear-gradient(to bottom, var(--accent), transparent);
+  opacity: 0.3;
+}
+
+.process-step:last-child .step-num::before {
+  display: none;
+}
+
+.step-content {
+  padding: 0 0 3rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+
+.process-step:last-child .step-content {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.step-title {
+  font-size: clamp(1rem, 2vw, 1.2rem) !important;
+  font-weight: 700 !important;
+  color: var(--white) !important;
+  margin: 0 0 0.75rem !important;
+  text-transform: none !important;
+  letter-spacing: -0.01em !important;
+}
+
+.step-desc {
+  font-size: 0.92rem !important;
+  color: rgba(255,255,255,0.65) !important;
+  line-height: 1.7 !important;
+  margin: 0 0 0.75rem !important;
+}
+
+.step-duration {
+  font-size: 0.75rem;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  background: rgba(75,123,245,0.1);
+  border: 1px solid rgba(75,123,245,0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 100px;
+  display: inline-block;
+}
+
+/* ============================================
+   SECTION TÉMOIGNAGES
+   ============================================ */
+.testimonials-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.testimonials-inner > .section-tag {
+  margin-bottom: 1rem;
+}
+
+.testimonials-inner > .section-title {
+  font-size: clamp(2rem, 5vw, 3.5rem) !important;
+  font-weight: 800 !important;
+  color: var(--white) !important;
+  text-transform: none !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.1 !important;
+  margin-bottom: clamp(3rem, 6vw, 5rem) !important;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 1.5rem;
+}
+
+.testimonial-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  margin: 0;
+  position: relative;
+  transition: all 0.4s ease;
+  backdrop-filter: blur(8px);
+}
+
+.testimonial-card:hover {
+  border-color: rgba(75,123,245,0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
+
+.testimonial-card.featured-t {
+  border-color: rgba(75,123,245,0.4);
+  background: rgba(75,123,245,0.05);
+}
+
+.testimonial-card.featured-t::before {
+  content: '"';
+  position: absolute;
+  top: -0.5rem;
+  left: 1.5rem;
+  font-size: 5rem;
+  color: var(--accent);
+  opacity: 0.15;
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+.t-stars {
+  color: #FFC107;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.t-text {
+  font-size: 0.9rem !important;
+  color: rgba(255,255,255,0.75) !important;
+  line-height: 1.75 !important;
+  margin: 0 0 1.5rem !important;
+  font-style: italic;
+}
+
+.t-author {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
+}
+
+.t-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), rgba(75,123,245,0.4));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--white);
+  flex-shrink: 0;
+  letter-spacing: 0.05em;
+}
+
+.t-author strong {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--white);
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.t-author span {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* ============================================
+   AMÉLIORATIONS NAV
+   ============================================ */
+nav .nav-logo {
+  font-size: 1.3rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.05em !important;
+  color: var(--white) !important;
+  background: linear-gradient(135deg, var(--white), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ============================================
+   AMÉLIORATIONS ABOUT
+   ============================================ */
+.s-about .section-title {
+  font-size: clamp(1.8rem, 4vw, 3rem) !important;
+  text-transform: none !important;
+  letter-spacing: -0.02em !important;
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+}
+
+.about-left .stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.stat-num {
+  font-size: clamp(1.8rem, 4vw, 2.5rem) !important;
+  font-weight: 900 !important;
+  color: var(--white) !important;
+  background: linear-gradient(135deg, var(--white) 40%, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+  line-height: 1 !important;
+  margin-bottom: 0.4rem;
+}
+
+.stat-lbl {
+  font-size: 0.72rem !important;
+  color: var(--muted) !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+}
+
+/* ============================================
+   AMÉLIORATIONS CONTACT
+   ============================================ */
+.contact-email {
+  font-size: clamp(1rem, 2.5vw, 1.5rem) !important;
+  word-break: break-all;
+}
+
+/* ============================================
+   RESPONSIVE MOBILE
+   ============================================ */
+@media (max-width: 768px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+  }
+  .process-step {
+    grid-template-columns: 48px 1fr;
+    gap: 0 1rem;
+  }
+  .services-cta-wrap {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .s-services,
+  .s-process,
+  .s-testimonials {
+    padding: 4rem 1.5rem;
+  }
+  nav .nav-links {
+    display: none;
+  }
+  .about-left .stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-left .stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ============================================
+   SCHEMA.ORG HIDDEN — Données structurées visibles
+   ============================================ */
+.s-services::after {
+  content: '';
+}
+
+/* Amélioration du btn-primary */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+.btn-primary:hover::after {
+  transform: translateX(100%);
+}
+
+/* ============================================
+   ACCESSIBILITÉ & FOCUS
+   ============================================ */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Skip to main content */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--accent);
+  color: white;
+  border-radius: 0 0 8px 8px;
+  font-weight: 700;
+  z-index: 9999;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 0;
+}
+</style><script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://celineharbane.fr/#person","name":"Céline Harbane","jobTitle":"Cheffe de Projet Digital & Développeuse Web","url":"https://celineharbane.fr","email":"contact@celineharbane.fr","address":{"@type":"PostalAddress","addressLocality":"Paris","addressRegion":"Île-de-France","addressCountry":"FR"},"description":"Cheffe de projet digitale et développeuse Shopify freelance à Paris. Spécialisée dans la création et migration de boutiques e-commerce Shopify pour PME, le pilotage de projets digitaux et le SEO e-commerce.","knowsAbout":["Shopify","Développement e-commerce","Migration Shopify","Chef de projet digital","SEO e-commerce","WooCommerce","PrestaShop"],"sameAs":["https://www.linkedin.com/in/celineharbane"]},{"@type":"LocalBusiness","@id":"https://celineharbane.fr/#business","name":"Céline Harbane — CDP & Développeuse Web","image":"https://celineharbane.fr/og-image.jpg","url":"https://celineharbane.fr","telephone":"","email":"contact@celineharbane.fr","address":{"@type":"PostalAddress","streetAddress":"Paris 11e","addressLocality":"Paris","addressRegion":"Île-de-France","postalCode":"75011","addressCountry":"FR"},"geo":{"@type":"GeoCoordinates","latitude":48.8566,"longitude":2.3522},"openingHoursSpecification":{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday"],"opens":"09:00","closes":"18:00"},"areaServed":["Paris","Île-de-France","France"],"priceRange":"€€","description":"Développement boutique Shopify sur mesure, migration WooCommerce/PrestaShop vers Shopify, pilotage de projets e-commerce pour PME. Basée à Paris, disponible partout en France.","hasOfferCatalog":{"@type":"OfferCatalog","name":"Services e-commerce Shopify pour PME","itemListElement":[{"@type":"Offer","itemOffered":{"@type":"Service","name":"Boutique Shopify sur mesure"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Migration vers Shopify"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"Chef de projet digital"}},{"@type":"Offer","itemOffered":{"@type":"Service","name":"SEO e-commerce Shopify"}}]}},{"@type":"WebSite","@id":"https://celineharbane.fr/#website","url":"https://celineharbane.fr","name":"Céline Harbane — Cheffe de Projet Digital & Développeuse Web","description":"Portfolio et services de Céline Harbane, CDP & Développeuse Web à Paris.","inLanguage":"fr-FR","potentialAction":{"@type":"SearchAction","target":"https://celineharbane.fr/?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"ItemList","name":"Services de Céline Harbane","itemListElement":[{"@type":"Service","position":1,"name":"Développement Web sur mesure","description":"Conception et développement de sites web modernes, rapides et optimisés","provider":{"@id":"https://celineharbane.fr/#person"}},{"@type":"Service","position":2,"name":"Pilotage de projet digital (CDP)","description":"Gestion de projet de A à Z : cadrage, specs, suivi dev, recette et livraison","provider":{"@id":"https://celineharbane.fr/#person"}},{"@type":"Service","position":3,"name":"Audit & stratégie SEO technique","description":"Audit SEO technique et optimisation pour améliorer le référencement Google","provider":{"@id":"https://celineharbane.fr/#person"}},{"@type":"Service","position":4,"name":"Refonte & optimisation UX","description":"Analyse et refonte de l'expérience utilisateur pour améliorer les conversions","provider":{"@id":"https://celineharbane.fr/#person"}}]}]}</script><style>
+/* Work card améliorations */
+.work-result-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.85rem;
+  border-radius: 100px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  background: rgba(75,123,245,0.1);
+  border: 1px solid rgba(75,123,245,0.3);
+  color: #4BF5B0;
+  margin-top: 0.6rem;
+  transition: all 0.3s ease;
+}
+.work-card:hover .work-result-badge {
+  background: rgba(75,245,176,0.15);
+  border-color: rgba(75,245,176,0.4);
+}
+
+/* Bandeau PME */
+.s-pme-band {
+  background: transparent;
+}
+
+/* Work card - amélioration hover global */
+.work-card {
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s ease;
+}
+.work-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+/* Services - outline-text réparation */
+.services-header .outline-text {
+  -webkit-text-stroke: 1.5px #4B7BF5;
+  color: transparent;
+  display: inline;
+}
+
+/* Responsive bandeau PME */
+@media (max-width: 600px) {
+  .s-pme-band > div:last-child {
+    gap: 0.5rem;
+  }
+}
+</style><style>
+  blockquote footer {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    border-top: 1px solid rgba(255,255,255,0.08) !important;
+    padding: 1.25rem 0 0 !important;
+    margin: 0 !important;
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    background: transparent !important;
+  }
+</style><style>
+  /* Cards projets avec image */
+  .work-card.has-preview {
+    position: relative;
+    overflow: hidden;
+  }
+  .work-card.has-preview .work-card-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover !important;
+    background-position: top center !important;
+    background-repeat: no-repeat !important;
+    transition: transform 0.6s cubic-bezier(0.23,1,0.32,1);
+    filter: brightness(0.35) saturate(0.8);
+  }
+  .work-card.has-preview:hover .work-card-bg {
+    transform: scale(1.05);
+    filter: brightness(0.45) saturate(1);
+  }
+  .work-card.has-preview .work-card-num,
+  .work-card.has-preview .work-card-info {
+    position: relative;
+    z-index: 2;
+  }
+  .work-card.has-preview .work-card-info {
+    padding-bottom: 0.5rem;
+  }
+  .work-card-preview-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 3;
+    background: rgba(0,0,0,0.55);
+    border: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    padding: 0.3rem 0.7rem;
+    border-radius: 100px;
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .work-card-preview-badge.shopify {
+    background: rgba(149,191,71,0.15);
+    border-color: rgba(149,191,71,0.4);
+    color: #95BF47;
+  }
+  /* Placeholder Gabriel Nouchi - visuel CSS */
+  .gn-placeholder {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 40%, #0d1a2e 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: filter 0.6s ease;
+    filter: brightness(0.6);
+  }
+  .work-card:hover .gn-placeholder {
+    filter: brightness(0.8);
+  }
+  .gn-placeholder-logo {
+    font-family: Georgia, serif;
+    font-size: 1.4rem;
+    color: rgba(255,255,255,0.85);
+    letter-spacing: 0.12em;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .gn-placeholder-sub {
+    font-size: 0.65rem;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .gn-placeholder-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    margin-top: 0.75rem;
+    opacity: 0.3;
+  }
+  .gn-placeholder-grid span {
+    width: 40px;
+    height: 55px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 4px;
+    display: block;
+  }
+</style><style>
+  .work-card.has-preview:hover .work-card-bg {
+    transform: scale(1.04);
+    filter: brightness(1) !important;
+  }
+  .work-card.has-preview .work-card-bg > div:first-child {
+    transition: opacity 0.4s ease;
+  }
+  .work-card.has-preview:hover .work-card-bg > div:first-child {
+    opacity: 0.85 !important;
+  }
+  /* Titre des cards en blanc bien visible */
+  .work-card.has-preview .work-card-title {
+    color: #fff !important;
+    font-weight: 800 !important;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.8);
+  }
+  .work-card.has-preview .work-card-cat {
+    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+  }
+  /* Badge position fixe */
+  .work-card-preview-badge {
+    position: absolute !important;
+    top: 1rem !important;
+    right: 1rem !important;
+    z-index: 5 !important;
+    padding: 0.28rem 0.7rem !important;
+    border-radius: 100px !important;
+    font-size: 0.62rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .work-card-preview-badge.shopify {
+    background: rgba(149,191,71,0.12) !important;
+    border: 1px solid rgba(149,191,71,0.45) !important;
+    color: #95BF47 !important;
+  }
+</style><style>.contact-whatsapp{display:inline-flex;align-items:center;gap:12px;margin-top:28px;padding:16px 36px;border:1px solid rgba(37,211,102,0.3);border-radius:50px;color:#25D366;font-size:1rem;letter-spacing:3px;text-transform:uppercase;text-decoration:none;transition:all 0.4s ease;}.contact-whatsapp:hover{background:rgba(37,211,102,0.1);border-color:#25D366;transform:translateY(-2px);}</style></head>
+<body style=""><a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+<div id="loader" style="opacity: 0; display: none;">
+  <div class="loader-brand" style="display: none;">VOID</div>
+  <div class="loader-bar-wrap"><div class="loader-bar" id="lbar" style="width: 100%;"></div></div>
+  <div class="loader-pct" id="lpct">100%</div>
+</div>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="grain"></div>
+<div class="deco-line deco-l"></div>
+<div class="deco-line deco-r"></div>
+
+<div id="canvas-wrap"><canvas id="three-canvas" width="1351" height="748" style="width: 901px; height: 499px;"></canvas></div>
+<div id="cursor" class="" style="translate: none; rotate: none; scale: none; transform: translate(-50%, -50%) translate(894px, 7px);"></div>
+
+<nav id="nav" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px); opacity: 1;">
+  <a class="nav-logo magnetic" href="#">CH</a>
+  <div class="nav-links"><a href="#services" class="nav-link magnetic">Services</a><a href="#work" class="nav-link magnetic">Projets</a><a href="#processus" class="nav-link magnetic">Approche</a><a href="#contact" class="nav-link magnetic">Contact</a></div>
+</nav>
+
+<main id="main-content">
+  <section class="s-hero" aria-label="Accueil — Céline Harbane CDP &amp; Développeuse Web" role="region">
+    <div class="hero-pre" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px); opacity: 1;">Cheffe de Projet &amp; Dev Shopify — Paris</div>
+    <h1 class="hero-title">
+      <span class="line" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0%);">VOTRE PROJET</span>
+      <span class="line outline" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0%);">DIGITAL</span>
+      <span class="line" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0%);">BIEN LIVRÉ.</span>
+    </h1>
+    <p class="hero-sub" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px); opacity: 1;">CDP + Dev Shopify en une seule personne.<br>Je lance ou migre votre boutique e-commerce — sans friction, dans les délais.</p>
+    <div class="hero-cta-wrap" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px); opacity: 1;">
+      <a class="btn-primary magnetic" href="#work">Démarrer mon projet</a>
+      <a class="btn-ghost magnetic" href="#about">Découvrir mes services</a>
+    </div><div class="hero-trust" style="display: flex; align-items: center; gap: 2rem; margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.06); flex-wrap: wrap;">
+    <div style="display:flex;align-items:center;gap:0.5rem;">
+      <span style="font-size:0.7rem;color:rgba(255,255,255,0.35);letter-spacing:0.1em;text-transform:uppercase;font-weight:600;">Ils m'ont fait confiance</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:0.9rem;flex-wrap:wrap;">
+      <span style="font-size:0.78rem;color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1);padding:0.3rem 0.9rem;border-radius:100px;">⭐ 5/5 · 40+ boutiques</span>
+      <span style="font-size:0.78rem;color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1);padding:0.3rem 0.9rem;border-radius:100px;">✓ Expert Shopify</span>
+      <span style="font-size:0.78rem;color:rgba(75,123,245,0.95);border:1px solid rgba(75,123,245,0.35);padding:0.3rem 0.9rem;border-radius:100px;font-weight:700;background:rgba(75,123,245,0.08);">→ Devis gratuit en 48h</span>
+    </div>
+  </div>
+    <div class="scroll-ind" style="opacity: 1;"><div class="scroll-line"></div><span>Scroll</span></div>
+  </section>
+
+  <div class="s-pme-band" style="padding: 2rem clamp(1.5rem, 6vw, 5rem); border-top: 1px solid rgba(255, 255, 255, 0.06); border-bottom: 1px solid rgba(255, 255, 255, 0.06); display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; position: relative; z-index: 2; overflow: hidden;">
+    <span style="font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.35);font-weight:600;white-space:nowrap;">Je travaille avec →</span>
+    <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+      <span style="padding:0.45rem 1rem;border:1px solid rgba(255,255,255,0.12);border-radius:100px;font-size:0.8rem;color:rgba(255,255,255,0.7);font-weight:500;">🛍️ PME e-commerce</span>
+      <span style="padding:0.45rem 1rem;border:1px solid rgba(255,255,255,0.12);border-radius:100px;font-size:0.8rem;color:rgba(255,255,255,0.7);font-weight:500;">🏭 Artisans &amp; négoces</span>
+      <span style="padding:0.45rem 1rem;border:1px solid rgba(255,255,255,0.12);border-radius:100px;font-size:0.8rem;color:rgba(255,255,255,0.7);font-weight:500;">👗 Mode &amp; lifestyle</span>
+      <span style="padding:0.45rem 1rem;border:1px solid rgba(255,255,255,0.12);border-radius:100px;font-size:0.8rem;color:rgba(255,255,255,0.7);font-weight:500;">🍽️ Food &amp; artisanat</span>
+      <span style="padding:0.45rem 1rem;border:1px solid rgba(75,123,245,0.3);border-radius:100px;font-size:0.8rem;color:#4B7BF5;font-weight:600;background:rgba(75,123,245,0.07);">Shopify · Migration · CDP</span>
+    </div>
+  </div><section class="s-about" id="about" aria-label="À propos de Céline Harbane" role="region">
+    <div class="about-left">
+      <div class="section-tag" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">Qui suis-je ?</div>
+      <h2 class="section-title" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">CDP + Dev Shopify : votre projet entre de bonnes mains.</h2>
+      <p class="section-body" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">Je suis Céline Harbane, cheffe de projet digitale et développeuse Shopify basée à Paris. Je travaille avec des PME qui veulent vendre en ligne sérieusement : boutiques Shopify sur mesure, migrations propres, pilotage de projet sans prise de tête. Technique + stratégie, dans un seul contrat.</p>
+      <div class="stats">
+        <div><div class="stat-num" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">40+</div><div class="stat-lbl">Boutiques livrées</div></div>
+        <div><div class="stat-num" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">100%</div><div class="stat-lbl">Données migrées</div></div>
+        <div><div class="stat-num" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">5+</div><div class="stat-lbl">Années Shopify</div></div>
+      </div>
+    </div>
+    <div class="about-right">
+      <div class="about-visual" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px); transform-origin: 0% 50%;">
+        <div class="about-label">Paris, Île-de-France</div>
+      </div>
+    </div>
+  </section>
+<section id="services" class="s-services" aria-label="Services de développement web et pilotage de projet" role="region">
+  <div class="services-inner">
+    <div class="services-header">
+      <div class="section-tag" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">— Ce que je fais</div>
+      <h2 class="section-title" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">Ce dont votre PME<br><span class="outline-text">a vraiment besoin.</span></h2>
+    </div>
+    <div class="services-grid">
+    <!-- SERVICE 01 : Shopify PME -->
+    <article class="service-card" itemscope="" itemtype="https://schema.org/Service">
+      <div class="service-icon">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 5c0 0-.3-1.2-1.4-1.3L14 3l-1 5.5" stroke="#4B7BF5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+          <path d="M9 8.5H7C5.9 8.5 5 9.4 5 10.5v14C5 25.6 5.9 26.5 7 26.5h18c1.1 0 2-.9 2-2v-14c0-1.1-.9-2-2-2h-2" stroke="#4B7BF5" stroke-width="1.5" stroke-linecap="round" fill="none"></path>
+          <path d="M10 15h12M10 19h8" stroke="#4B7BF5" stroke-width="1.5" stroke-linecap="round"></path>
+        </svg>
+      </div>
+      <div class="service-num">01</div>
+      <h3 class="service-title" itemprop="name">Boutique Shopify sur mesure</h3>
+      <p class="service-problem">❌ Vous vendez encore uniquement en physique ou votre site ne convertit pas ?</p>
+      <p class="service-solution" itemprop="description">Je conçois et développe votre boutique Shopify de A à Z — design pro, paiements, stocks, fiches produits optimisées SEO. Opérationnelle en 3 à 6 semaines.</p>
+      <ul class="service-tags">
+        <li>Shopify / Shopify Plus</li>
+        <li>Design sur mesure</li>
+        <li>SEO produits</li>
+        <li>Paiements &amp; livraison</li>
+      </ul>
+    </article>
+
+    <!-- SERVICE 02 : Migration CDP - LE + DEMANDÉ -->
+    <article class="service-card featured" itemscope="" itemtype="https://schema.org/Service">
+      <div class="service-badge">Le + demandé par les PME</div>
+      <div class="service-icon">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 16c0-6.1 4.9-11 11-11s11 4.9 11 11-4.9 11-11 11" stroke="#4B7BF5" stroke-width="1.5" stroke-linecap="round" fill="none"></path>
+          <path d="M5 27v-6h6" stroke="#4B7BF5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M14 11l5 5-5 5" stroke="#4B7BF5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </div>
+      <div class="service-num">02</div>
+      <h3 class="service-title" itemprop="name">Migration vers Shopify</h3>
+      <p class="service-problem">❌ Votre site PrestaShop, WooCommerce ou Wix est devenu un boulet ?</p>
+      <p class="service-solution" itemprop="description">Je pilote toute la migration : audit de l'existant, transfert des données (produits, clients, commandes), redirection SEO, recette et mise en ligne. Zéro perte de données, zéro downtime.</p>
+      <ul class="service-tags">
+        <li>Presta / WooCommerce / Wix</li>
+        <li>Transfert données</li>
+        <li>Redirections SEO 301</li>
+        <li>Recette complète</li>
+      </ul>
+    </article>
+
+    <!-- SERVICE 03 : Pilotage CDP -->
+    <article class="service-card" itemscope="" itemtype="https://schema.org/Service">
+      <div class="service-icon">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="16" r="13" stroke="#4B7BF5" stroke-width="1.5" fill="none"></circle>
+          <path d="M16 8v8l5 3" stroke="#4B7BF5" stroke-width="1.5" stroke-linecap="round"></path>
+        </svg>
+      </div>
+      <div class="service-num">03</div>
+      <h3 class="service-title" itemprop="name">Chef de projet digital (CDP)</h3>
+      <p class="service-problem">❌ Trop de prestataires à gérer, des délais qui glissent et un budget incontrôlé ?</p>
+      <p class="service-solution" itemprop="description">J'interviens comme chef de projet unique de votre côté : je rédige les specs, coordonne les prestataires, suis les développements et assure la recette. Une seule interlocutrice — vous gardez la main.</p>
+      <ul class="service-tags">
+        <li>Cahier des charges</li>
+        <li>Coordination équipe</li>
+        <li>Suivi budget &amp; délais</li>
+        <li>Recette &amp; livraison</li>
+      </ul>
+    </article>
+
+    <!-- SERVICE 04 : SEO Shopify -->
+    <article class="service-card" itemscope="" itemtype="https://schema.org/Service">
+      <div class="service-icon">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 26V18M11 26V12M16 26V6M21 26V14M26 26V10" stroke="#4B7BF5" stroke-width="1.5" stroke-linecap="round"></path>
+        </svg>
+      </div>
+      <div class="service-num">04</div>
+      <h3 class="service-title" itemprop="name">Performance &amp; SEO e-commerce</h3>
+      <p class="service-problem">❌ Votre boutique existe mais personne ne la trouve sur Google ?</p>
+      <p class="service-solution" itemprop="description">J'audite votre boutique Shopify, corrige les blocages techniques et optimise fiches produits, collections et vitesse de chargement pour générer un trafic organique durable.</p>
+      <ul class="service-tags">
+        <li>Audit Shopify</li>
+        <li>SEO on-page</li>
+        <li>Core Web Vitals</li>
+        <li>Données structurées</li>
+      </ul>
+    </article>
+  </div>
+    <div class="services-cta-wrap">
+      <a href="#contact" class="btn-primary magnetic">Parler de mon projet</a>
+      <span class="services-cta-hint">Premier échange gratuit · Devis sous 48h · Aucun engagement</span>
+    </div>
+  </div>
+</section>
+<section id="processus" class="s-process" aria-label="Mon processus de travail" role="region">
+  <div class="process-inner">
+    <div class="process-header">
+      <div class="section-tag" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">— Mon approche</div>
+      <h2 class="section-title" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">Un processus clair,<br>des livrables précis.</h2>
+    </div>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h3 class="step-title">Écoute &amp; diagnostic</h3>
+          <p class="step-desc">On commence par un échange approfondi pour comprendre votre activité, vos objectifs et vos contraintes. J'identifie les vrais problèmes avant de proposer des solutions.</p>
+          <span class="step-duration">⏱ 1–2 jours</span>
+        </div>
+        <div class="step-line"></div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h3 class="step-title">Cadrage &amp; proposition</h3>
+          <p class="step-desc">Je formalise une proposition claire : périmètre, planning, budget, livrables. Pas de mauvaise surprise : tout est écrit et validé ensemble.</p>
+          <span class="step-duration">⏱ 2–3 jours</span>
+        </div>
+        <div class="step-line"></div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h3 class="step-title">Conception &amp; développement</h3>
+          <p class="step-desc">Je conçois, développe et itère en continu avec vos retours. Accès à un environnement de prévisualisation à chaque étape clé.</p>
+          <span class="step-duration">⏱ Selon projet</span>
+        </div>
+        <div class="step-line"></div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h3 class="step-title">Livraison &amp; accompagnement</h3>
+          <p class="step-desc">Mise en ligne, formation à la prise en main, transfert de documentation. Je reste disponible après livraison pour assurer votre autonomie.</p>
+          <span class="step-duration">⏱ Suivi 30 jours</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="temoignages" class="s-testimonials" aria-label="Témoignages clients" role="region">
+  <div class="testimonials-inner">
+    <div class="section-tag" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">— Ils témoignent</div>
+    <h2 class="section-title" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">Des PME qui me font confiance.</h2>
+    <div class="testimonials-grid">
+      <blockquote class="testimonial-card">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"On avait une boutique PrestaShop à bout de souffle. Céline a piloté toute la migration Shopify en 5 semaines : données, SEO, design. Résultat : +55% de CA sur les 3 premiers mois. On ne pensait pas que c'était possible aussi vite."</p>
+        <footer class="t-author" style="display: flex; align-items: center; gap: 0.75rem; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 1.25rem; margin-top: 0px; background: none; flex-wrap: nowrap; justify-content: flex-start;">
+  <div class="t-avatar" style="
+    width:42px;height:42px;border-radius:50%;
+    background:linear-gradient(135deg,#4B7BF5,rgba(75,123,245,0.4));
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.75rem;font-weight:800;color:#fff;flex-shrink:0;letter-spacing:0.05em;
+  ">IM</div>
+  <div>
+    <strong style="display:block;font-size:0.85rem;color:#fff;font-weight:700;margin-bottom:0.2rem;">Isabelle M.</strong>
+    <span style="font-size:0.75rem;color:rgba(255,255,255,0.5);">Gérante, boutique mode — 8 salariés</span>
+  </div>
+</footer>
+      </blockquote>
+      <blockquote class="testimonial-card featured-t">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"On est une PME de 12 personnes, on n'avait pas de DSI. Céline a été notre chef de projet et notre dev à la fois. Elle a cadré, livré, formé l'équipe. Exactement ce dont on avait besoin sans se ruiner en agence."</p>
+        <footer class="t-author" style="display: flex; align-items: center; gap: 0.75rem; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 1.25rem; margin-top: 0px; background: none; flex-wrap: nowrap; justify-content: flex-start;">
+          <div class="t-avatar">DK</div>
+          <div>
+            <strong>David K.</strong>
+            <span>Directeur, PME industrie — 25 salariés</span>
+          </div>
+        </footer>
+      </blockquote>
+      <blockquote class="testimonial-card">
+        <div class="t-stars">★★★★★</div>
+        <p class="t-text">"Notre boutique Shopify était belle mais invisible. Après l'audit et les corrections SEO, on est passés en première page Google sur nos produits phares. Le trafic organique a triplé en 2 mois."</p>
+        <footer class="t-author" style="display: flex; align-items: center; gap: 0.75rem; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 1.25rem; margin-top: 0px; background: none; flex-wrap: nowrap; justify-content: flex-start;">
+          <div class="t-avatar">AT</div>
+          <div>
+            <strong>Aurélie T.</strong>
+            <span>Responsable marketing, PME cosmétique</span>
+          </div>
+        </footer>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+  <section class="s-work" id="work" aria-label="Mes réalisations" role="region">
+    <div class="work-header" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">
+      <div>
+        <div class="section-tag" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">Projets PME</div>
+        <h2 class="section-title" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">Des PME qui vendent mieux en ligne.</h2>
+      </div>
+      <a class="btn-ghost magnetic" href="#contact">Discuter de votre projet →</a>
+    </div>
+    <div class="work-grid">
+      <div class="work-card magnetic has-preview" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px); overflow: hidden; position: relative;"><div style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 0; pointer-events: none;"></div>
+        <div class="work-card-bg" style="position: relative; inset: 0px; background: radial-gradient(at 60% 20%, rgba(210, 170, 120, 0.25) 0%, transparent 55%), radial-gradient(at 20% 80%, rgba(180, 130, 90, 0.2) 0%, transparent 50%), linear-gradient(160deg, rgb(26, 18, 8) 0%, rgb(42, 30, 16) 35%, rgb(28, 21, 16) 65%, rgb(15, 12, 8) 100%); transition: transform 0.6s, filter 0.5s; filter: brightness(0.8); overflow: visible; z-index: 0;">
+  <div style="
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    gap:0.4rem; padding:1.5rem;
+    opacity:0.6;
+  ">
+    <div style="
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size:1.1rem; letter-spacing:0.18em;
+      color:rgba(220,190,140,0.9); text-align:center;
+      line-height:1.3; font-weight:400;
+    ">germaine<br><span style="font-size:0.85rem">des prés</span></div>
+    <div style="width:40px;height:1px;background:rgba(220,190,140,0.4);margin:0.4rem 0;"></div>
+    <div style="font-size:0.55rem;letter-spacing:0.25em;color:rgba(220,190,140,0.5);text-transform:uppercase;">Paris</div>
+    <div style="
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:4px; margin-top:1rem; opacity:0.4;
+    ">
+      <div style="width:48px;height:64px;background:rgba(220,190,140,0.2);border-radius:3px;"></div>
+      <div style="width:48px;height:64px;background:rgba(220,190,140,0.15);border-radius:3px;margin-top:10px;"></div>
+    </div>
+  </div>
+  <div style="
+    position:absolute; bottom:0; left:0; right:0; height:40%;
+    background:linear-gradient(to top, rgba(10,8,4,0.9), transparent);
+  "></div>
+<div style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; background-image: url(&quot;https://api.microlink.io/?url=https://www.germainedespres.com/&amp;screenshot=true&amp;meta=false&amp;embed=screenshot.url&quot;); background-size: cover; background-position: center top; opacity: 0.35; border-radius: inherit; z-index: 0; transition: opacity 0.5s;"></div><img src="https://www.germainedespres.com/cdn/shop/files/GDP_LOGO_WEB_1200x1200.png?v=1647598597" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; object-fit: contain; opacity: 0.3; border-radius: inherit; z-index: 1; pointer-events: none; padding: 20%;"></div>
+        <div class="work-card-num" style="z-index: 2;">01</div>
+        <div class="work-card-info" style="z-index: 2;"><div class="work-card-cat">Shopify · Mode · Éco-responsable</div><div class="work-card-title">GERMAINE DES PRÉS</div><p class="work-card-desc" style="font-size: 0.78rem; color: rgba(255, 255, 255, 0.45); margin: 0.25rem 0px 0.9rem; line-height: 1.5;">Lingerie &amp; vêtements d'intérieur — boutique Shopify, Paris</p><div class="work-result-badge" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.85rem; border-radius: 100px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; background: rgba(75, 123, 245, 0.12); border: 1px solid rgba(210, 170, 120, 0.4); color: rgb(210, 170, 120); margin-top: 0.5rem;">↑ Boutique Shopify live</div><span class="work-sector" style="display: block; font-size: 0.68rem; color: rgba(255, 255, 255, 0.28); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.5rem; font-weight: 500;">Mode · Lingerie · Paris</span></div>
+        <div class="work-card-line" style="z-index: 2;"></div>
+      <div class="work-card-preview-badge shopify" style="z-index: 5;">✦ Shopify</div></div>
+      <div class="work-card magnetic has-preview" style="margin-top: 3rem; translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px); overflow: hidden; position: relative;"><div style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 0; pointer-events: none;"></div>
+        <div class="work-card-bg" style="position: relative; inset: 0px; background: radial-gradient(at 70% 30%, rgba(60, 80, 140, 0.3) 0%, transparent 55%), radial-gradient(at 30% 75%, rgba(40, 60, 120, 0.2) 0%, transparent 50%), linear-gradient(155deg, rgb(8, 12, 26) 0%, rgb(13, 20, 40) 40%, rgb(9, 14, 30) 70%, rgb(6, 8, 16) 100%); transition: transform 0.6s, filter 0.5s; filter: brightness(0.8); overflow: visible; z-index: 0;">
+  <div style="
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    gap:0.4rem; padding:1.5rem;
+    opacity:0.65;
+  ">
+    <div style="
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size:0.95rem; letter-spacing:0.22em;
+      color:rgba(180,200,240,0.9); text-align:center;
+      line-height:1.4; font-weight:400; text-transform:uppercase;
+    ">Gabriel<br>Nouchi</div>
+    <div style="width:35px;height:1px;background:rgba(180,200,240,0.35);margin:0.4rem 0;"></div>
+    <div style="font-size:0.5rem;letter-spacing:0.3em;color:rgba(180,200,240,0.45);text-transform:uppercase;">Collection</div>
+    <div style="
+      display:flex; gap:4px; margin-top:1rem; opacity:0.35;
+    ">
+      <div style="width:32px;height:72px;background:rgba(180,200,240,0.2);border-radius:3px;"></div>
+      <div style="width:32px;height:72px;background:rgba(180,200,240,0.15);border-radius:3px;margin-top:8px;"></div>
+      <div style="width:32px;height:72px;background:rgba(180,200,240,0.1);border-radius:3px;margin-top:16px;"></div>
+    </div>
+  </div>
+  <div style="
+    position:absolute; bottom:0; left:0; right:0; height:45%;
+    background:linear-gradient(to top, rgba(6,8,16,0.92), transparent);
+  "></div>
+<div style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; background-image: url(&quot;https://api.microlink.io/?url=https://www.louisgabrielnouchi.com/&amp;screenshot=true&amp;meta=false&amp;embed=screenshot.url&quot;); background-size: cover; background-position: center top; opacity: 0.35; border-radius: inherit; z-index: 0; transition: opacity 0.5s;"></div><img src="http://www.louisgabrielnouchi.com/cdn/shop/files/YOUTUBE_BANNER.jpg?v=1733831274" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; object-fit: cover; opacity: 0.5; border-radius: inherit; z-index: 1; pointer-events: none;"></div>
+        <div class="work-card-num" style="z-index: 2;">02</div>
+        <div class="work-card-info" style="z-index: 2;"><div class="work-card-cat">Shopify · Mode · CDP</div><div class="work-card-title">GABRIEL NOUCHI</div><p class="work-card-desc" style="font-size: 0.78rem; color: rgba(255, 255, 255, 0.45); margin: 0.25rem 0px 0.9rem; line-height: 1.5;">Prêt-à-porter masculin — boutique Shopify + pilotage CDP</p><div class="work-result-badge" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.85rem; border-radius: 100px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; background: rgba(75, 123, 245, 0.12); border: 1px solid rgba(123, 159, 212, 0.4); color: rgb(123, 159, 212); margin-top: 0.5rem;">↑ Boutique Shopify live</div><span class="work-sector" style="display: block; font-size: 0.68rem; color: rgba(255, 255, 255, 0.28); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.5rem; font-weight: 500;">Mode masculine · Paris</span></div>
+        <div class="work-card-line" style="z-index: 2;"></div>
+      <div class="work-card-preview-badge shopify" style="z-index: 5;">✦ Shopify</div></div>
+      <div class="work-card magnetic has-preview" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px); overflow: hidden;">
+        <div class="work-card-bg" style="position: absolute; inset: 0px; background: radial-gradient(at 50% 30%, rgba(75, 123, 245, 0.2) 0%, transparent 55%), linear-gradient(150deg, rgb(8, 13, 24) 0%, rgb(14, 21, 37) 45%, rgb(7, 11, 21) 100%); transition: transform 0.6s, filter 0.5s; filter: brightness(0.8); overflow: visible; z-index: 0;">
+  <div style="
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    gap:0.5rem; padding:1.5rem; opacity:0.55;
+  ">
+    <div style="font-size:0.6rem;letter-spacing:0.25em;color:rgba(75,123,245,0.7);text-transform:uppercase;font-weight:700;">Migration</div>
+    <div style="
+      font-family: Georgia, serif; font-size:1rem;
+      letter-spacing:0.15em; color:rgba(200,210,240,0.8);
+      text-align:center; line-height:1.4;
+    ">PME<br><span style="font-size:0.8rem">e-commerce</span></div>
+    <div style="width:35px;height:1px;background:rgba(75,123,245,0.35);margin:0.3rem 0;"></div>
+    <div style="
+      display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:0.75rem;opacity:0.4;
+    ">
+      <div style="width:44px;height:30px;background:rgba(75,123,245,0.2);border-radius:4px;"></div>
+      <div style="width:44px;height:30px;background:rgba(75,123,245,0.15);border-radius:4px;"></div>
+      <div style="width:44px;height:30px;background:rgba(75,123,245,0.15);border-radius:4px;"></div>
+      <div style="width:44px;height:30px;background:rgba(75,123,245,0.1);border-radius:4px;"></div>
+    </div>
+  </div>
+  <div style="position: absolute; bottom: 0px; left: 0px; right: 0px; height: 45%; background: linear-gradient(to top, rgba(7, 11, 21, 0.92), transparent); opacity: 0.35;"></div>
+</div>
+        <div class="work-card-num" style="z-index: 2;">03</div>
+        <div class="work-card-info" style="z-index: 2;"><div class="work-card-cat">Migration · Shopify · SEO</div><div class="work-card-title">PME NÉGOCE B2B</div><p class="work-card-desc" style="font-size: 0.78rem; color: rgba(255, 255, 255, 0.45); margin: 0.25rem 0px 0.9rem; line-height: 1.5;">PrestaShop → Shopify : catalogue 500+ produits, espace B2B, SEO conservé</p><div class="work-result-badge" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.85rem; border-radius: 100px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; background: rgba(75, 123, 245, 0.12); border: 1px solid rgba(75, 245, 176, 0.4); color: rgb(75, 245, 176); margin-top: 0.5rem;">↑ 0 perte de données</div><span class="work-sector" style="display: block; font-size: 0.68rem; color: rgba(255, 255, 255, 0.28); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.5rem; font-weight: 500;">Négoce · B2B · Distribution</span></div>
+        <div class="work-card-line" style="z-index: 2;"></div>
+      <div class="work-card-preview-badge shopify" style="z-index: 5;">✦ Migration</div></div>
+    </div>
+  </section>
+
+  <section class="s-contact" id="contact" aria-label="Contactez Céline Harbane" role="region">
+    <div class="section-tag" style="justify-content: center; translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">— Contact</div>
+    <h2 class="contact-title" style="line-height: 1.05; display: block; margin-bottom: 1.5rem; opacity: 1; transform: translate(0px, 0px);"><span style="display: block; color: rgb(255, 255, 255); margin-bottom: 0.1em;">PARLONS DE</span><span style="display: block; -webkit-text-stroke: 1.5px rgb(75, 123, 245); color: transparent;">VOTRE PROJET</span></h2>
+    <p class="contact-sub" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">Vous êtes une PME et vous voulez lancer ou refondre votre boutique en ligne ? Partagez-moi votre projet — je vous reviens sous 24h avec une analyse et une approche concrète.</p>
+    <a class="contact-email magnetic" href="mailto:harbaneceline@gmail.com" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">harbaneceline@gmail.com</a><a href="https://wa.me/33666461363?text=Bonjour%20C%C3%A9line%2C%20j%27aimerais%20discuter%20de%20mon%20projet%20Shopify" target="_blank" rel="noopener" class="contact-whatsapp magnetic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" fill="#25D366"></path><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.832-1.438A9.955 9.955 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" stroke="#25D366" stroke-width="1.5" fill="none"></path></svg><span>WhatsApp</span></a><div class="contact-infos" style="display: flex; gap: 2rem; margin-top: 3rem; flex-wrap: wrap; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 2.5rem;">
+      <div class="contact-info-item" style="display:flex;flex-direction:column;gap:0.4rem;">
+        <span style="font-size:0.72rem;letter-spacing:0.15em;color:rgba(255,255,255,0.4);text-transform:uppercase;font-weight:600;">Disponibilité</span>
+        <span style="font-size:0.95rem;color:#fff;font-weight:600;">Missions PME dès maintenant</span>
+      </div>
+      <div class="contact-info-item" style="display:flex;flex-direction:column;gap:0.4rem;">
+        <span style="font-size:0.72rem;letter-spacing:0.15em;color:rgba(255,255,255,0.4);text-transform:uppercase;font-weight:600;">Zone</span>
+        <span style="font-size:0.95rem;color:#fff;font-weight:600;">Paris · Remote · Toute la France</span>
+      </div>
+      <div class="contact-info-item" style="display:flex;flex-direction:column;gap:0.4rem;">
+        <span style="font-size:0.72rem;letter-spacing:0.15em;color:rgba(255,255,255,0.4);text-transform:uppercase;font-weight:600;">Réponse</span>
+        <span style="font-size:0.95rem;color:#fff;font-weight:600;">Sous 24h garanties</span>
+      </div>
+      <div class="contact-info-item" style="display:flex;flex-direction:column;gap:0.4rem;">
+        <span style="font-size:0.72rem;letter-spacing:0.15em;color:rgba(255,255,255,0.4);text-transform:uppercase;font-weight:600;">Devis</span>
+        <span style="font-size:0.95rem;color:#4B7BF5;font-weight:700;">Gratuit &amp; sans engagement</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer style="padding: 1.75rem clamp(1.5rem, 6vw, 5rem); display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255, 255, 255, 0.06); flex-wrap: wrap; gap: 0.75rem; position: relative; z-index: 10;">
+    <span style="font-size:0.8rem;color:rgba(255,255,255,0.35);letter-spacing:0.03em;">© 2026 Céline Harbane</span>
+    <span style="font-size:0.72rem;color:rgba(255,255,255,0.22);letter-spacing:0.1em;text-transform:uppercase;">Cheffe de Projet &amp; Dev Shopify · Paris</span>
+    <span style="font-size:0.72rem;color:rgba(255,255,255,0.18);">Tous droits réservés</span>
+  </footer>
+
+<script>
+const canvas = document.getElementById('three-canvas');
+const renderer = new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.outputEncoding=THREE.sRGBEncoding;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure=1.1;
+
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(55,window.innerWidth/window.innerHeight,0.1,1000);
+camera.position.set(0,0,6);
+
+scene.add(new THREE.AmbientLight(0xffffff,0.2));
+const key=new THREE.DirectionalLight(0x6699ff,2.5); key.position.set(4,4,5); scene.add(key);
+const fill=new THREE.PointLight(0x8b5cf6,2,20); fill.position.set(-4,-2,-3); scene.add(fill);
+const rim=new THREE.PointLight(0x3b82f6,1.5,15); rim.position.set(2,4,-5); scene.add(rim);
+
+const mainGroup=new THREE.Group(); scene.add(mainGroup);
+
+const knotGeo=new THREE.TorusKnotGeometry(1.1,0.32,180,24,2,3);
+const knotMat=new THREE.MeshPhysicalMaterial({color:0x0a0a1a,metalness:0.05,roughness:0.0,transmission:0.55,thickness:3,ior:1.9,clearcoat:1,clearcoatRoughness:0.0,envMapIntensity:2});
+mainGroup.add(new THREE.Mesh(knotGeo,knotMat));
+
+const wireGeo=new THREE.TorusKnotGeometry(1.12,0.33,80,12,2,3);
+const wireMat=new THREE.MeshBasicMaterial({color:0x3b82f6,wireframe:true,transparent:true,opacity:0.07});
+mainGroup.add(new THREE.Mesh(wireGeo,wireMat));
+
+const isMobile=window.innerWidth<=768;
+const pCount=isMobile?300:1600;
+const pGeo=new THREE.BufferGeometry();
+const pPos=new Float32Array(pCount*3);
+for(let i=0;i<pCount;i++){
+  const phi=Math.acos(-1+(2*i)/pCount);
+  const theta=Math.sqrt(pCount*Math.PI)*phi;
+  const r=3+Math.random()*2.5;
+  pPos[i*3]=r*Math.sin(phi)*Math.cos(theta);
+  pPos[i*3+1]=r*Math.sin(phi)*Math.sin(theta);
+  pPos[i*3+2]=r*Math.cos(phi);
+}
+pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
+const particles=new THREE.Points(pGeo,new THREE.PointsMaterial({color:0x3b82f6,size:0.022,transparent:true,opacity:0.4,blending:THREE.AdditiveBlending,depthWrite:false}));
+mainGroup.add(particles);
+
+const knotMesh=mainGroup.children[0];
+const wireMesh=mainGroup.children[1];
+
+window.addEventListener('resize',()=>{
+  camera.aspect=window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth,window.innerHeight);
+});
+
+let mx=0,my=0,tmx=0,tmy=0;
+document.addEventListener('mousemove',e=>{
+  mx=(e.clientX/window.innerWidth-0.5)*2;
+  my=(e.clientY/window.innerHeight-0.5)*2;
+});
+
+let time=0;
+function animate(){
+  requestAnimationFrame(animate); time+=0.008;
+  tmx+=(mx-tmx)*0.04; tmy+=(my-tmy)*0.04;
+  mainGroup.rotation.y+=(tmx*0.25-mainGroup.rotation.y)*0.05;
+  mainGroup.rotation.x+=(-tmy*0.12-mainGroup.rotation.x)*0.05;
+  knotMesh.rotation.y+=0.003; knotMesh.rotation.z+=0.001;
+  wireMesh.rotation.y+=0.003; wireMesh.rotation.z+=0.001;
+  mainGroup.position.y=Math.sin(time*0.7)*0.09;
+  particles.rotation.y+=0.0006;
+  particles.rotation.x=Math.sin(time*0.2)*0.04;
+  const sp=window.scrollY/(document.body.scrollHeight-window.innerHeight||1);
+  const ts=1-sp*0.3;
+  mainGroup.scale.setScalar(mainGroup.scale.x+(ts-mainGroup.scale.x)*0.05);
+  renderer.render(scene,camera);
+}
+animate();
+
+// LOADER
+const loaderEl=document.getElementById('loader');
+const lbar=document.getElementById('lbar');
+const lpct=document.getElementById('lpct');
+let pct=0;
+const li=setInterval(()=>{
+  pct=Math.min(pct+Math.random()*10+3,95);
+  lbar.style.width=pct+'%'; lpct.textContent=Math.floor(pct)+'%';
+},100);
+setTimeout(()=>{
+  clearInterval(li); lbar.style.width='100%'; lpct.textContent='100%';
+  setTimeout(()=>{ loaderEl.style.opacity='0'; setTimeout(()=>{ loaderEl.style.display='none'; startEntry(); },700); },400);
+},1600);
+
+function startEntry(){
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.to('#nav',{opacity:1,y:0,duration:0.8,ease:'power2.out'});
+  gsap.to('.hero-pre',{opacity:1,y:0,duration:0.7,delay:0.2,ease:'power2.out'});
+  gsap.to('.hero-title .line',{y:'0%',stagger:0.12,duration:1.1,delay:0.35,ease:'power3.out'});
+  gsap.to('.hero-sub',{opacity:1,y:0,duration:0.8,delay:0.8,ease:'power2.out'});
+  gsap.to('.hero-cta-wrap',{opacity:1,y:0,duration:0.8,delay:1.0,ease:'power2.out'});
+  gsap.to('.scroll-ind',{opacity:1,duration:0.8,delay:1.4});
+
+  ScrollTrigger.create({trigger:'#about',start:'top 65%',onEnter:()=>{
+    gsap.to(camera.position,{x:-1.2,z:7,duration:1.5,ease:'power2.inOut'});
+    gsap.fromTo('.section-tag',{y:30,opacity:0},{y:0,opacity:1,duration:0.6,ease:'power2.out'});
+    gsap.fromTo('.section-title',{y:50,opacity:0},{y:0,opacity:1,duration:0.9,delay:0.15,ease:'power3.out'});
+    gsap.fromTo('.section-body',{y:30,opacity:0},{y:0,opacity:1,duration:0.8,delay:0.3,ease:'power2.out'});
+    gsap.fromTo('.stat-num',{y:20,opacity:0},{y:0,opacity:1,stagger:0.1,duration:0.7,delay:0.5,ease:'power2.out'});
+    gsap.fromTo('.about-visual',{scaleX:0},{scaleX:1,duration:1,delay:0.2,ease:'power3.inOut',transformOrigin:'left'});
+  }});
+
+  ScrollTrigger.create({trigger:'#work',start:'top 60%',onEnter:()=>{
+    gsap.to(camera.position,{x:0,y:0.5,z:6,duration:1.4,ease:'power2.inOut'});
+    gsap.fromTo('.work-header',{y:40,opacity:0},{y:0,opacity:1,duration:0.8,ease:'power2.out'});
+    gsap.fromTo('.work-card',{y:60,opacity:0},{y:0,opacity:1,stagger:0.12,duration:0.9,delay:0.2,ease:'power3.out'});
+  }});
+
+  ScrollTrigger.create({trigger:'#contact',start:'top 65%',onEnter:()=>{
+    gsap.to(camera.position,{x:0,y:0,z:8,duration:1.6,ease:'power2.inOut'});
+    gsap.fromTo('.contact-title',{y:60,opacity:0},{y:0,opacity:1,duration:1,ease:'power3.out'});
+    gsap.fromTo('.contact-sub',{y:30,opacity:0},{y:0,opacity:1,duration:0.8,delay:0.3,ease:'power2.out'});
+    gsap.fromTo('.contact-email',{y:20,opacity:0},{y:0,opacity:1,duration:0.7,delay:0.5,ease:'power2.out'});
+  }});
+}
+
+const cur=document.getElementById('cursor');
+if(!('ontouchstart' in window)){
+  document.addEventListener('mousemove',e=>{ gsap.to(cur,{x:e.clientX,y:e.clientY,duration:0.12,ease:'none'}); });
+  document.querySelectorAll('.magnetic').forEach(el=>{
+    el.addEventListener('mouseenter',()=>cur.classList.add('big'));
+    el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
+  });
+} else { cur.style.display='none'; }
+</script>
+
+
+</body></html>

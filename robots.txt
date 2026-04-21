@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://celine-harbane-cheffe-de-projet-et-dev.vercel.app/sitemap.xml
