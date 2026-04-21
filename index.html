@@ -1288,6 +1288,117 @@ html {
 }
 </style>
 
+<style>
+.s-skills{padding:6rem 10vw;position:relative;z-index:10}
+.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3.5rem}
+.skill-card{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.07);padding:2rem 1.75rem;transition:border-color 0.3s,background 0.3s}
+.skill-card:hover{border-color:rgba(75,123,245,0.3);background:rgba(75,123,245,0.04)}
+.skill-card-icon{font-size:1.5rem;margin-bottom:1rem}
+.skill-card-title{font-family:var(--font-display);font-size:1.1rem;letter-spacing:0.1em;color:var(--text);margin-bottom:1.25rem;text-transform:uppercase}
+.skill-tags{display:flex;flex-wrap:wrap;gap:0.4rem}
+.skill-tag{font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.3rem 0.75rem;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.55);border-radius:3px;transition:all 0.25s}
+.skill-card:hover .skill-tag{border-color:rgba(75,123,245,0.25);color:rgba(255,255,255,0.8)}
+.skill-tag.highlight{border-color:rgba(75,123,245,0.45);color:#7BA8FF;background:rgba(75,123,245,0.08)}
+@media(max-width:900px){.skills-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.skills-grid{grid-template-columns:1fr}}
+</style>
+
+<section class="s-skills" id="competences" aria-label="Compétences de Céline Harbane" role="region">
+  <div class="section-tag">Compétences</div>
+  <h2 class="section-title">Tout ce qu'il faut<br><span style="-webkit-text-stroke:1.5px #4B7BF5;color:transparent;">pour vendre en ligne.</span></h2>
+  <div class="skills-grid">
+
+    <div class="skill-card">
+      <div class="skill-card-icon">🛍️</div>
+      <div class="skill-card-title">Shopify</div>
+      <div class="skill-tags">
+        <span class="skill-tag highlight">Liquid</span>
+        <span class="skill-tag highlight">Shopify Plus</span>
+        <span class="skill-tag">Shopify Markets</span>
+        <span class="skill-tag">Thème sur mesure</span>
+        <span class="skill-tag">Apps & intégrations</span>
+        <span class="skill-tag">Metafields</span>
+        <span class="skill-tag">Shopify B2B</span>
+        <span class="skill-tag">Klaviyo</span>
+        <span class="skill-tag">Recharge</span>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon">📈</div>
+      <div class="skill-card-title">Conversion & CRO</div>
+      <div class="skill-tags">
+        <span class="skill-tag highlight">CRO</span>
+        <span class="skill-tag highlight">Tunnel d'achat UX</span>
+        <span class="skill-tag">Fiche produit conversion</span>
+        <span class="skill-tag">Upsell / Cross-sell</span>
+        <span class="skill-tag">A/B Testing</span>
+        <span class="skill-tag">Hotjar</span>
+        <span class="skill-tag">GA4</span>
+        <span class="skill-tag">Checkout UX</span>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon">🔄</div>
+      <div class="skill-card-title">Migration</div>
+      <div class="skill-tags">
+        <span class="skill-tag highlight">PrestaShop → Shopify</span>
+        <span class="skill-tag highlight">WooCommerce → Shopify</span>
+        <span class="skill-tag">Wix → Shopify</span>
+        <span class="skill-tag">Magento → Shopify</span>
+        <span class="skill-tag">Transfert données</span>
+        <span class="skill-tag">Redirections SEO 301</span>
+        <span class="skill-tag">0 downtime</span>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon">🔍</div>
+      <div class="skill-card-title">SEO E-commerce</div>
+      <div class="skill-tags">
+        <span class="skill-tag highlight">SEO technique Shopify</span>
+        <span class="skill-tag">Title & meta produits</span>
+        <span class="skill-tag">Schema.org</span>
+        <span class="skill-tag">Core Web Vitals</span>
+        <span class="skill-tag">Maillage interne</span>
+        <span class="skill-tag">Netlinking</span>
+        <span class="skill-tag">Google Search Console</span>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon">🎨</div>
+      <div class="skill-card-title">UX / UI Design</div>
+      <div class="skill-tags">
+        <span class="skill-tag highlight">Figma</span>
+        <span class="skill-tag">Wireframing</span>
+        <span class="skill-tag">Prototypage</span>
+        <span class="skill-tag">Design System</span>
+        <span class="skill-tag">Mobile-first</span>
+        <span class="skill-tag">Accessibilité WCAG</span>
+        <span class="skill-tag">Direction artistique</span>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-card-icon">🗂️</div>
+      <div class="skill-card-title">Chef de projet</div>
+      <div class="skill-tags">
+        <span class="skill-tag highlight">Cahier des charges</span>
+        <span class="skill-tag highlight">Coordination équipe</span>
+        <span class="skill-tag">Recette & livraison</span>
+        <span class="skill-tag">Suivi budget</span>
+        <span class="skill-tag">KPIs & reporting</span>
+        <span class="skill-tag">Notion</span>
+        <span class="skill-tag">Loom</span>
+        <span class="skill-tag">Agile / Scrum</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
   <section class="s-work" id="work" aria-label="Mes réalisations" role="region">
     <div class="work-header">
       <div>
