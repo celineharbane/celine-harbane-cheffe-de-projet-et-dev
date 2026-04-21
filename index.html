@@ -1254,115 +1254,114 @@ html {
   </div>
 </section>
 
+<style>
+.proj-list{display:flex;flex-direction:column;gap:7rem;width:100%}
+.proj-row{display:grid;grid-template-columns:58% 1fr;gap:5rem;align-items:center}
+.proj-row.reverse{grid-template-columns:1fr 58%}
+.proj-row.reverse .proj-screen{order:2}
+.proj-row.reverse .proj-info{order:1}
+.proj-browser{background:#141416;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.09);box-shadow:0 40px 100px rgba(0,0,0,0.6);transform:perspective(1200px) rotateY(-3deg) rotateX(1.5deg);transition:transform 0.6s cubic-bezier(0.23,1,0.32,1),box-shadow 0.6s ease}
+.proj-row.reverse .proj-browser{transform:perspective(1200px) rotateY(3deg) rotateX(1.5deg)}
+.proj-browser:hover{transform:perspective(1200px) rotateY(0deg) rotateX(0deg)!important;box-shadow:0 60px 120px rgba(0,0,0,0.7)}
+.proj-browser-bar{height:34px;background:#1e1e22;display:flex;align-items:center;padding:0 14px;gap:6px;border-bottom:1px solid rgba(255,255,255,0.05)}
+.proj-dot{width:11px;height:11px;border-radius:50%;display:block;flex-shrink:0}
+.proj-dot.red{background:#ff5f56}.proj-dot.yellow{background:#ffbd2e}.proj-dot.green{background:#27c93f}
+.proj-url{flex:1;text-align:center;font-size:0.66rem;color:rgba(255,255,255,0.22);letter-spacing:0.04em}
+.proj-browser-img img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;object-position:top center;transition:transform 0.5s ease}
+.proj-browser:hover .proj-browser-img img{transform:scale(1.02)}
+.proj-browser-placeholder{aspect-ratio:16/9;background:linear-gradient(135deg,#0d1220 0%,#1a2a40 50%,#0d1220 100%);display:flex;align-items:center;justify-content:center;gap:2rem;color:rgba(255,255,255,0.4);font-size:0.9rem;letter-spacing:0.12em;text-transform:uppercase}
+.proj-placeholder-arrow{color:var(--accent);font-size:1.4rem}
+.proj-num{font-family:var(--font-display);font-size:6rem;line-height:1;color:rgba(255,255,255,0.035);margin-bottom:-1.5rem;user-select:none}
+.proj-cat{font-size:0.67rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:0.9rem}
+.proj-title{font-family:var(--font-display);font-size:clamp(2rem,3vw,3rem);color:var(--text);line-height:0.95;letter-spacing:0.02em;margin-bottom:1.25rem}
+.proj-desc{font-size:0.875rem;color:var(--muted);line-height:1.75;margin-bottom:1.5rem;max-width:36ch}
+.proj-tags{display:flex;flex-wrap:wrap;gap:0.45rem;margin-bottom:2rem}
+.proj-tag{font-size:0.61rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.28rem 0.8rem;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.38);border-radius:100px}
+.proj-cta{font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--text);text-decoration:none;display:inline-flex;align-items:center;gap:0.55rem;border-bottom:1px solid rgba(255,255,255,0.12);padding-bottom:0.3rem;transition:gap 0.3s,color 0.3s,border-color 0.3s}
+.proj-cta:hover{gap:0.9rem;color:var(--accent);border-color:var(--accent)}
+.proj-sep{width:100%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.06),transparent)}
+@media(max-width:900px){
+  .proj-row,.proj-row.reverse{grid-template-columns:1fr;gap:2.5rem}
+  .proj-row.reverse .proj-screen,.proj-row.reverse .proj-info{order:unset}
+  .proj-list{gap:5rem}
+  .proj-num{font-size:4rem}
+}
+</style>
+
   <section class="s-work" id="work" aria-label="Mes réalisations" role="region">
-    <div class="work-header" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">
+    <div class="work-header">
       <div>
-        <div class="section-tag" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">Projets PME</div>
-        <h2 class="section-title" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">Des PME qui vendent mieux en ligne.</h2>
+        <div class="section-tag">Projets PME</div>
+        <h2 class="section-title">Des PME qui vendent mieux en ligne.</h2>
       </div>
       <a class="btn-ghost magnetic" href="#contact">Discuter de votre projet →</a>
     </div>
-    <div class="work-grid">
-      <div class="work-card magnetic has-preview" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px); overflow: hidden; position: relative;"><div style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 0; pointer-events: none;"></div>
-        <div class="work-card-bg" style="position: relative; inset: 0px; background: radial-gradient(at 60% 20%, rgba(210, 170, 120, 0.25) 0%, transparent 55%), radial-gradient(at 20% 80%, rgba(180, 130, 90, 0.2) 0%, transparent 50%), linear-gradient(160deg, rgb(26, 18, 8) 0%, rgb(42, 30, 16) 35%, rgb(28, 21, 16) 65%, rgb(15, 12, 8) 100%); transition: transform 0.6s, filter 0.5s; filter: brightness(0.8); overflow: visible; z-index: 0;">
-  <div style="
-    position:absolute; inset:0;
-    display:flex; flex-direction:column;
-    align-items:center; justify-content:center;
-    gap:0.4rem; padding:1.5rem;
-    opacity:0.6;
-  ">
-    <div style="
-      font-family: Georgia, 'Times New Roman', serif;
-      font-size:1.1rem; letter-spacing:0.18em;
-      color:rgba(220,190,140,0.9); text-align:center;
-      line-height:1.3; font-weight:400;
-    ">germaine<br><span style="font-size:0.85rem">des prés</span></div>
-    <div style="width:40px;height:1px;background:rgba(220,190,140,0.4);margin:0.4rem 0;"></div>
-    <div style="font-size:0.55rem;letter-spacing:0.25em;color:rgba(220,190,140,0.5);text-transform:uppercase;">Paris</div>
-    <div style="
-      display:grid; grid-template-columns:1fr 1fr;
-      gap:4px; margin-top:1rem; opacity:0.4;
-    ">
-      <div style="width:48px;height:64px;background:rgba(220,190,140,0.2);border-radius:3px;"></div>
-      <div style="width:48px;height:64px;background:rgba(220,190,140,0.15);border-radius:3px;margin-top:10px;"></div>
-    </div>
-  </div>
-  <div style="
-    position:absolute; bottom:0; left:0; right:0; height:40%;
-    background:linear-gradient(to top, rgba(10,8,4,0.9), transparent);
-  "></div>
-</div>
-<img src="images/germaine-des-pres.jpg" alt="Germaine des Prés — Boutique Shopify" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; opacity: 0.8; z-index: 1; pointer-events: none;">
-        <div class="work-card-num" style="z-index: 2;">01</div>
-        <div class="work-card-info" style="z-index: 2;"><div class="work-card-cat">Shopify · Mode · Éco-responsable</div><div class="work-card-title">GERMAINE DES PRÉS</div><p class="work-card-desc" style="font-size: 0.78rem; color: rgba(255, 255, 255, 0.45); margin: 0.25rem 0px 0.9rem; line-height: 1.5;">Lingerie &amp; vêtements d'intérieur — boutique Shopify, Paris</p><div class="work-result-badge" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.85rem; border-radius: 100px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; background: rgba(75, 123, 245, 0.12); border: 1px solid rgba(210, 170, 120, 0.4); color: rgb(210, 170, 120); margin-top: 0.5rem;">↑ Boutique Shopify live</div><span class="work-sector" style="display: block; font-size: 0.68rem; color: rgba(255, 255, 255, 0.28); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.5rem; font-weight: 500;">Mode · Lingerie · Paris</span></div>
-        <div class="work-card-line" style="z-index: 2;"></div>
-      <div class="work-card-preview-badge shopify" style="z-index: 5;">✦ Shopify</div></div>
-      <div class="work-card magnetic has-preview" style="margin-top: 3rem; translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px); overflow: hidden; position: relative;"><div style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; z-index: 0; pointer-events: none;"></div>
-        <div class="work-card-bg" style="position: relative; inset: 0px; background: radial-gradient(at 70% 30%, rgba(60, 80, 140, 0.3) 0%, transparent 55%), radial-gradient(at 30% 75%, rgba(40, 60, 120, 0.2) 0%, transparent 50%), linear-gradient(155deg, rgb(8, 12, 26) 0%, rgb(13, 20, 40) 40%, rgb(9, 14, 30) 70%, rgb(6, 8, 16) 100%); transition: transform 0.6s, filter 0.5s; filter: brightness(0.8); overflow: visible; z-index: 0;">
-  <div style="
-    position:absolute; inset:0;
-    display:flex; flex-direction:column;
-    align-items:center; justify-content:center;
-    gap:0.4rem; padding:1.5rem;
-    opacity:0.65;
-  ">
-    <div style="
-      font-family: Georgia, 'Times New Roman', serif;
-      font-size:0.95rem; letter-spacing:0.22em;
-      color:rgba(180,200,240,0.9); text-align:center;
-      line-height:1.4; font-weight:400; text-transform:uppercase;
-    ">Gabriel<br>Nouchi</div>
-    <div style="width:35px;height:1px;background:rgba(180,200,240,0.35);margin:0.4rem 0;"></div>
-    <div style="font-size:0.5rem;letter-spacing:0.3em;color:rgba(180,200,240,0.45);text-transform:uppercase;">Collection</div>
-    <div style="
-      display:flex; gap:4px; margin-top:1rem; opacity:0.35;
-    ">
-      <div style="width:32px;height:72px;background:rgba(180,200,240,0.2);border-radius:3px;"></div>
-      <div style="width:32px;height:72px;background:rgba(180,200,240,0.15);border-radius:3px;margin-top:8px;"></div>
-      <div style="width:32px;height:72px;background:rgba(180,200,240,0.1);border-radius:3px;margin-top:16px;"></div>
-    </div>
-  </div>
-  <div style="
-    position:absolute; bottom:0; left:0; right:0; height:45%;
-    background:linear-gradient(to top, rgba(6,8,16,0.92), transparent);
-  "></div>
-</div>
-<img src="images/lgn.jpg" alt="Louis Gabriel Nouchi — Boutique Shopify" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; opacity: 0.8; z-index: 1; pointer-events: none;">
-        <div class="work-card-num" style="z-index: 2;">02</div>
-        <div class="work-card-info" style="z-index: 2;"><div class="work-card-cat">Shopify · Mode · CDP</div><div class="work-card-title">GABRIEL NOUCHI</div><p class="work-card-desc" style="font-size: 0.78rem; color: rgba(255, 255, 255, 0.45); margin: 0.25rem 0px 0.9rem; line-height: 1.5;">Prêt-à-porter masculin — boutique Shopify + pilotage CDP</p><div class="work-result-badge" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.85rem; border-radius: 100px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; background: rgba(75, 123, 245, 0.12); border: 1px solid rgba(123, 159, 212, 0.4); color: rgb(123, 159, 212); margin-top: 0.5rem;">↑ Boutique Shopify live</div><span class="work-sector" style="display: block; font-size: 0.68rem; color: rgba(255, 255, 255, 0.28); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.5rem; font-weight: 500;">Mode masculine · Paris</span></div>
-        <div class="work-card-line" style="z-index: 2;"></div>
-      <div class="work-card-preview-badge shopify" style="z-index: 5;">✦ Shopify</div></div>
-      <div class="work-card magnetic has-preview" style="translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px); overflow: hidden;">
-        <div class="work-card-bg" style="position: absolute; inset: 0px; background: radial-gradient(at 50% 30%, rgba(75, 123, 245, 0.2) 0%, transparent 55%), linear-gradient(150deg, rgb(8, 13, 24) 0%, rgb(14, 21, 37) 45%, rgb(7, 11, 21) 100%); transition: transform 0.6s, filter 0.5s; filter: brightness(0.8); overflow: visible; z-index: 0;">
-  <div style="
-    position:absolute; inset:0;
-    display:flex; flex-direction:column;
-    align-items:center; justify-content:center;
-    gap:0.5rem; padding:1.5rem; opacity:0.55;
-  ">
-    <div style="font-size:0.6rem;letter-spacing:0.25em;color:rgba(75,123,245,0.7);text-transform:uppercase;font-weight:700;">Migration</div>
-    <div style="
-      font-family: Georgia, serif; font-size:1rem;
-      letter-spacing:0.15em; color:rgba(200,210,240,0.8);
-      text-align:center; line-height:1.4;
-    ">PME<br><span style="font-size:0.8rem">e-commerce</span></div>
-    <div style="width:35px;height:1px;background:rgba(75,123,245,0.35);margin:0.3rem 0;"></div>
-    <div style="
-      display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:0.75rem;opacity:0.4;
-    ">
-      <div style="width:44px;height:30px;background:rgba(75,123,245,0.2);border-radius:4px;"></div>
-      <div style="width:44px;height:30px;background:rgba(75,123,245,0.15);border-radius:4px;"></div>
-      <div style="width:44px;height:30px;background:rgba(75,123,245,0.15);border-radius:4px;"></div>
-      <div style="width:44px;height:30px;background:rgba(75,123,245,0.1);border-radius:4px;"></div>
-    </div>
-  </div>
-  <div style="position: absolute; bottom: 0px; left: 0px; right: 0px; height: 45%; background: linear-gradient(to top, rgba(7, 11, 21, 0.92), transparent); opacity: 0.35;"></div>
-</div>
-        <div class="work-card-num" style="z-index: 2;">03</div>
-        <div class="work-card-info" style="z-index: 2;"><div class="work-card-cat">Migration · Shopify · SEO</div><div class="work-card-title">PME NÉGOCE B2B</div><p class="work-card-desc" style="font-size: 0.78rem; color: rgba(255, 255, 255, 0.45); margin: 0.25rem 0px 0.9rem; line-height: 1.5;">PrestaShop → Shopify : catalogue 500+ produits, espace B2B, SEO conservé</p><div class="work-result-badge" style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.3rem 0.85rem; border-radius: 100px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; background: rgba(75, 123, 245, 0.12); border: 1px solid rgba(75, 245, 176, 0.4); color: rgb(75, 245, 176); margin-top: 0.5rem;">↑ 0 perte de données</div><span class="work-sector" style="display: block; font-size: 0.68rem; color: rgba(255, 255, 255, 0.28); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.5rem; font-weight: 500;">Négoce · B2B · Distribution</span></div>
-        <div class="work-card-line" style="z-index: 2;"></div>
-      <div class="work-card-preview-badge shopify" style="z-index: 5;">✦ Migration</div></div>
+    <div class="proj-list">
+      <!-- 01 — Germaine des Prés -->
+      <div class="proj-row">
+        <div class="proj-screen">
+          <div class="proj-browser">
+            <div class="proj-browser-bar">
+              <span class="proj-dot red"></span><span class="proj-dot yellow"></span><span class="proj-dot green"></span>
+              <span class="proj-url">germainedespres.com</span>
+            </div>
+            <div class="proj-browser-img"><img src="images/germaine-des-pres.jpg" alt="Germaine des Prés — Boutique Shopify"></div>
+          </div>
+        </div>
+        <div class="proj-info">
+          <div class="proj-num">01</div>
+          <div class="proj-cat">Shopify · Mode · Lingerie</div>
+          <h3 class="proj-title">GERMAINE<br>DES PRÉS</h3>
+          <p class="proj-desc">Boutique Shopify pour cette marque parisienne de lingerie et vêtements d'intérieur éco-responsables. Thème sur mesure, optimisation UX et SEO.</p>
+          <div class="proj-tags"><span class="proj-tag">Shopify</span><span class="proj-tag">Thème sur mesure</span><span class="proj-tag">UX / UI</span><span class="proj-tag">SEO</span></div>
+          <a href="#contact" class="proj-cta">Discuter d'un projet similaire →</a>
+        </div>
+      </div>
+      <div class="proj-sep"></div>
+      <!-- 02 — Louis Gabriel Nouchi -->
+      <div class="proj-row reverse">
+        <div class="proj-screen">
+          <div class="proj-browser">
+            <div class="proj-browser-bar">
+              <span class="proj-dot red"></span><span class="proj-dot yellow"></span><span class="proj-dot green"></span>
+              <span class="proj-url">louisgabrielnouchi.com</span>
+            </div>
+            <div class="proj-browser-img"><img src="images/lgn.jpg" alt="Louis Gabriel Nouchi — Boutique Shopify"></div>
+          </div>
+        </div>
+        <div class="proj-info">
+          <div class="proj-num">02</div>
+          <div class="proj-cat">Shopify · Mode Masculine · CDP</div>
+          <h3 class="proj-title">LOUIS GABRIEL<br>NOUCHI</h3>
+          <p class="proj-desc">Boutique Shopify et pilotage chef de projet digital pour cette maison de prêt-à-porter masculin haut de gamme. Développement et suivi opérationnel.</p>
+          <div class="proj-tags"><span class="proj-tag">Shopify</span><span class="proj-tag">Chef de projet</span><span class="proj-tag">Mode Homme</span><span class="proj-tag">CDP</span></div>
+          <a href="#contact" class="proj-cta">Discuter d'un projet similaire →</a>
+        </div>
+      </div>
+      <div class="proj-sep"></div>
+      <!-- 03 — Migration PME B2B -->
+      <div class="proj-row">
+        <div class="proj-screen">
+          <div class="proj-browser">
+            <div class="proj-browser-bar">
+              <span class="proj-dot red"></span><span class="proj-dot yellow"></span><span class="proj-dot green"></span>
+              <span class="proj-url">migration · prestashop → shopify</span>
+            </div>
+            <div class="proj-browser-placeholder">
+              <span>PrestaShop</span><span class="proj-placeholder-arrow">→</span><span>Shopify</span>
+            </div>
+          </div>
+        </div>
+        <div class="proj-info">
+          <div class="proj-num">03</div>
+          <div class="proj-cat">Migration · Shopify · SEO</div>
+          <h3 class="proj-title">PME<br>NÉGOCE B2B</h3>
+          <p class="proj-desc">Migration PrestaShop → Shopify : catalogue 500+ produits, espace B2B dédié, SEO intégralement conservé. Zéro perte de données, mise en ligne sans interruption.</p>
+          <div class="proj-tags"><span class="proj-tag">Migration</span><span class="proj-tag">Shopify B2B</span><span class="proj-tag">500+ produits</span><span class="proj-tag">SEO</span></div>
+          <a href="#contact" class="proj-cta">Discuter d'un projet similaire →</a>
+        </div>
+      </div>
+
     </div>
   </section>
 
