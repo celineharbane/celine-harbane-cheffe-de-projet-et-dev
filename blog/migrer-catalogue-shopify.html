@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Comment migrer 500+ produits vers Shopify sans erreur | Céline Harbane</title>
+<meta name="description" content="Méthode étape par étape pour migrer un catalogue de 500+ produits vers Shopify : CSV, Matrixify, variantes, images et données clients.">
+<link rel="canonical" href="https://celine-harbane-cheffe-de-projet-et.vercel.app/blog/migrer-catalogue-shopify.html">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060608;--text:#f0eeea;--muted:#8a8a9a;--accent:#3b82f6;--font-display:'Bebas Neue',sans-serif;--font-body:'DM Sans',sans-serif}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+nav{padding:1.5rem 6vw;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.06)}
+.nav-logo{font-family:var(--font-display);font-size:1.4rem;letter-spacing:0.35em;color:var(--text);text-decoration:none}
+.nav-links{display:flex;gap:2rem;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase}
+.nav-links a{color:var(--text)}.nav-links a:hover{color:var(--accent);text-decoration:none}
+.nav-cta{font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.55rem 1.2rem;border:1px solid rgba(59,130,246,0.5);color:var(--text);transition:background 0.3s;text-decoration:none}
+.nav-cta:hover{background:var(--accent)}
+.article-wrap{max-width:760px;margin:0 auto;padding:4rem 2rem 6rem}
+.article-back{font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);display:inline-flex;align-items:center;gap:0.4rem;margin-bottom:2.5rem;text-decoration:none}
+.article-back:hover{color:var(--accent);text-decoration:none}
+.article-tag{font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);line-height:1;letter-spacing:0.02em;margin-bottom:1.5rem}
+.article-meta{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.07);margin-bottom:2.5rem}
+.article-intro{font-size:1.1rem;color:rgba(255,255,255,0.8);line-height:1.75;margin-bottom:2.5rem;font-weight:300}
+h2{font-family:var(--font-display);font-size:1.8rem;letter-spacing:0.04em;margin:2.5rem 0 1rem;color:var(--text)}
+h3{font-size:1rem;font-weight:700;margin:1.75rem 0 0.75rem;color:var(--text)}
+p{color:var(--muted);line-height:1.8;margin-bottom:1.25rem}
+ul,ol{color:var(--muted);line-height:1.8;margin-bottom:1.25rem;padding-left:1.5rem}
+li{margin-bottom:0.4rem}
+.highlight-box{background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.25);padding:1.5rem 2rem;border-radius:4px;margin:2rem 0}
+.highlight-box p{color:rgba(255,255,255,0.75);margin:0}
+.warning-box{background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.25);padding:1.5rem 2rem;border-radius:4px;margin:2rem 0}
+.warning-box p{color:rgba(255,255,255,0.75);margin:0}
+.cta-box{background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.35);padding:2.5rem;border-radius:4px;margin:3rem 0;text-align:center}
+.cta-box h3{font-family:var(--font-display);font-size:1.6rem;color:var(--text);margin:0 0 0.75rem}
+.cta-box p{color:rgba(255,255,255,0.65);margin-bottom:1.5rem}
+.cta-btn{display:inline-block;background:var(--accent);color:#fff;padding:0.75rem 2rem;font-size:0.82rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:700;transition:background 0.3s;text-decoration:none}
+.cta-btn:hover{background:#2563eb;text-decoration:none}
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:0.85rem}
+th{background:rgba(255,255,255,0.06);color:var(--text);font-weight:700;padding:0.75rem 1rem;text-align:left;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase}
+td{padding:0.75rem 1rem;border-bottom:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+.breadcrumb{font-size:0.72rem;color:var(--muted);padding:1rem 6vw;letter-spacing:0.05em}
+.breadcrumb a{color:var(--muted)}.breadcrumb a:hover{color:var(--accent);text-decoration:none}
+footer{padding:2rem 6vw;border-top:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+footer p{color:var(--muted);font-size:0.78rem}
+@media(max-width:600px){.nav-links{display:none}.article-wrap{padding:2rem 1.25rem 4rem}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">CH</a>
+  <div class="nav-links">
+    <a href="/#services">Services</a>
+    <a href="/#work">Projets</a>
+    <a href="/blog/">Blog</a>
+    <a href="/#contact">Contact</a>
+  </div>
+  <a class="nav-cta" href="https://wa.me/33666461363?text=Bonjour%20C%C3%A9line" target="_blank">Devis gratuit</a>
+</nav>
+<div class="breadcrumb"><a href="/">Accueil</a> › <a href="/blog/">Blog</a> › Comment migrer 500+ produits vers Shopify sans erreur</div>
+<div class="article-wrap">
+  <a class="article-back" href="/blog/">← Retour au blog</a>
+
+  <div class="article-tag">Migration · Technique</div>
+  <h1>COMMENT MIGRER 500+ PRODUITS VERS SHOPIFY SANS ERREUR</h1>
+  <div class="article-meta">Céline Harbane · Avril 2025 · 10 min de lecture</div>
+
+  <p class="article-intro">Migrer un grand catalogue vers Shopify, ce n'est pas "exporter un CSV et l'importer". Sur 500 produits avec variantes, images et métadonnées SEO, une migration non préparée produit des données corrompues, des images manquantes et des descriptions tronquées. Voici la méthode que j'utilise pour mes clients avec des catalogues de 300 à 3 000 références.</p>
+
+  <h2>POURQUOI LE CSV NATIF SHOPIFY NE SUFFIT PAS</h2>
+  <p>Shopify propose un import CSV natif. Il fonctionne correctement pour des catalogues simples de moins de 100 produits avec peu de variantes. Au-delà, il montre ses limites :</p>
+  <ul>
+    <li>Pas de gestion des métafields (données personnalisées)</li>
+    <li>Pas d'import des métadonnées SEO directement</li>
+    <li>Gestion des images limitée (URL uniquement, pas d'upload direct)</li>
+    <li>Pas d'import des collections et leurs règles</li>
+    <li>Pas d'import des clients et historique de commandes</li>
+  </ul>
+  <p>Pour tout projet au-delà de 100 produits ou nécessitant une migration complète des données, l'outil de référence est <strong>Matrixify</strong> (anciennement Excelify). C'est l'outil que j'utilise sur tous mes projets.</p>
+
+  <h2>MATRIXIFY : L'OUTIL INDISPENSABLE</h2>
+  <p>Matrixify est une application Shopify (29–199 €/mois selon le volume) qui permet d'importer et exporter l'intégralité des données d'une boutique Shopify via des fichiers Excel ou CSV structurés. Ses avantages :</p>
+  <ul>
+    <li>Import/export des produits avec toutes leurs variantes et métafields</li>
+    <li>Gestion des collections (manuelles et automatiques) avec leurs conditions</li>
+    <li>Import des clients avec leurs adresses et métadonnées</li>
+    <li>Import de l'historique des commandes (pour continuité du service client)</li>
+    <li>Import des redirections URL en masse</li>
+    <li>Logs détaillés des erreurs pour corriger rapidement</li>
+  </ul>
+
+  <div class="highlight-box">
+    <p><strong>Pro tip :</strong> Matrixify propose un plan gratuit limité à 10 lignes par import — utile pour tester la structure de votre fichier avant de lancer l'import complet. Je commence toujours par un test sur 10 produits représentatifs avant de lancer la migration complète.</p>
+  </div>
+
+  <h2>ÉTAPE 1 : PRÉPARER ET NETTOYER LES DONNÉES SOURCE</h2>
+  <p>Avant d'importer quoi que ce soit, on nettoie. C'est l'étape qu'on veut sauter pour gagner du temps — et celle qui fait perdre le plus de temps si on la néglige.</p>
+
+  <h3>Nettoyage du catalogue</h3>
+  <p>Profitez de la migration pour faire le ménage. Identifiez et marquez :</p>
+  <ul>
+    <li>Les produits inactifs ou en rupture définitive (à archiver, pas à migrer)</li>
+    <li>Les descriptions dupliquées ou incomplètes (à compléter avant migration)</li>
+    <li>Les images manquantes ou de mauvaise qualité (à remplacer)</li>
+    <li>Les prix et stocks à vérifier (c'est le bon moment)</li>
+  </ul>
+
+  <h3>Standardisation des catégories</h3>
+  <p>Les structures de catégories ne se correspondent pas toujours d'une plateforme à l'autre. Shopify utilise des "collections" qui peuvent être manuelles (vous ajoutez les produits) ou automatiques (basées sur des conditions comme un tag ou une plage de prix). Définissez votre nouvelle arborescence de collections Shopify avant de commencer l'import.</p>
+
+  <h2>ÉTAPE 2 : STRUCTURER LE FICHIER MATRIXIFY</h2>
+  <p>Le fichier Matrixify pour les produits est un tableur Excel avec des onglets dédiés. L'onglet Products contient les colonnes suivantes pour une migration complète :</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Colonne</th>
+        <th>Contenu</th>
+        <th>Importance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Handle</td>
+        <td>Identifiant unique + slug URL</td>
+        <td>Critique (SEO)</td>
+      </tr>
+      <tr>
+        <td>Title</td>
+        <td>Nom du produit</td>
+        <td>Critique</td>
+      </tr>
+      <tr>
+        <td>Body HTML</td>
+        <td>Description HTML du produit</td>
+        <td>Critique (SEO)</td>
+      </tr>
+      <tr>
+        <td>Vendor</td>
+        <td>Marque / fournisseur</td>
+        <td>Important</td>
+      </tr>
+      <tr>
+        <td>Tags</td>
+        <td>Tags pour filtres et collections auto</td>
+        <td>Important</td>
+      </tr>
+      <tr>
+        <td>SEO Title</td>
+        <td>Balise title meta</td>
+        <td>Critique (SEO)</td>
+      </tr>
+      <tr>
+        <td>SEO Description</td>
+        <td>Meta description</td>
+        <td>Critique (SEO)</td>
+      </tr>
+      <tr>
+        <td>Variant SKU</td>
+        <td>Référence produit/variante</td>
+        <td>Critique</td>
+      </tr>
+      <tr>
+        <td>Variant Price</td>
+        <td>Prix de vente</td>
+        <td>Critique</td>
+      </tr>
+      <tr>
+        <td>Variant Inventory Qty</td>
+        <td>Stock disponible</td>
+        <td>Critique</td>
+      </tr>
+      <tr>
+        <td>Image Src</td>
+        <td>URL de l'image (accessible en ligne)</td>
+        <td>Critique</td>
+      </tr>
+      <tr>
+        <td>Image Alt Text</td>
+        <td>Texte alternatif image</td>
+        <td>Important (SEO)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>ÉTAPE 3 : GÉRER LES VARIANTES CORRECTEMENT</h2>
+  <p>C'est le point le plus délicat pour les grands catalogues. Dans Matrixify, chaque variante d'un produit est une ligne distincte dans le fichier. Un produit avec 3 tailles × 4 couleurs = 12 lignes dans le fichier, toutes avec le même Handle mais des valeurs Option1 et Option2 différentes.</p>
+
+  <div class="warning-box">
+    <p><strong>Limite Shopify :</strong> Shopify supporte jusqu'à 3 options de variantes (ex: taille, couleur, matière) et 100 variantes par produit. Si votre catalogue source a des produits avec plus de 3 options de personnalisation ou plus de 100 combinaisons, il faudra adapter la structure avant la migration — en utilisant des métafields ou en séparant certains produits.</p>
+  </div>
+
+  <h2>ÉTAPE 4 : LES IMAGES — NE PAS TOUT PERDRE</h2>
+  <p>Les images doivent être accessibles via une URL publique lors de l'import. Si elles sont sur votre ancienne plateforme (PrestaShop, WooCommerce), deux options :</p>
+  <ul>
+    <li><strong>Option A (simple) :</strong> Garder l'ancien site en ligne pendant la migration et utiliser les URLs d'images existantes. Shopify téléchargera les images lors de l'import.</li>
+    <li><strong>Option B (propre) :</strong> Exporter toutes les images, les uploader sur un CDN temporaire (Amazon S3, Cloudinary) et utiliser les nouvelles URLs dans le fichier.</li>
+  </ul>
+  <p>Pour les catalogues de plus de 1 000 images, je recommande l'option B : elle permet de nettoyer, renommer et optimiser les images en même temps.</p>
+
+  <h2>ÉTAPE 5 : CLIENTS ET COMMANDES</h2>
+  <p>Migrer les données clients vers Shopify est possible mais demande attention :</p>
+  <ul>
+    <li>Les mots de passe ne se transfèrent pas (Shopify enverra automatiquement un email d'invitation à chaque client pour créer un nouveau mot de passe)</li>
+    <li>Les données de carte bancaire ne se transfèrent jamais (conformité PCI-DSS)</li>
+    <li>L'historique des commandes peut être importé pour garder la traçabilité, mais les commandes importées sont marquées "archivées" et ne relancent pas les workflows</li>
+  </ul>
+
+  <div class="highlight-box">
+    <p><strong>Bonne pratique :</strong> Prévenez vos clients par email quelques jours avant la migration qu'ils recevront un email de "Activation de compte" de la part de votre nouvelle boutique. Sans cette communication, beaucoup de clients pensent à un phishing et ignorent l'email — et se retrouvent bloqués lors de leur prochaine commande.</p>
+  </div>
+
+  <h2>ÉTAPE 6 : VALIDATION AVANT MISE EN LIGNE</h2>
+  <p>Avant de basculer le nom de domaine vers Shopify, voici la checklist de validation :</p>
+  <ol>
+    <li>Vérifier 50 produits aléatoires : titre, description, prix, stock, images, variantes</li>
+    <li>Tester le parcours d'achat complet (panier → checkout → paiement test)</li>
+    <li>Vérifier les emails transactionnels (confirmation commande, expédition, abandon panier)</li>
+    <li>Contrôler les zones de livraison et les frais de port</li>
+    <li>Vérifier les pages légales (CGV, politique de retour, mentions légales)</li>
+    <li>Tester sur mobile (iOS et Android)</li>
+    <li>Vérifier que les redirections SEO sont en place</li>
+  </ol>
+
+  <p>Une migration de 500 produits bien préparée prend entre 3 et 5 jours de travail effectif. Bâclée, elle prend 2 fois plus de temps à corriger après coup — sans compter les commandes perdues pendant les dysfonctionnements.</p>
+
+  <div class="cta-box">
+    <h3>VOTRE PROJET DE MIGRATION ?</h3>
+    <p>Devis gratuit sous 48h. Je réponds à toutes vos questions sans engagement.</p>
+    <a class="cta-btn" href="https://wa.me/33666461363?text=Bonjour%20C%C3%A9line" target="_blank">Me contacter sur WhatsApp →</a>
+  </div>
+</div>
+<footer>
+  <p>© 2025 Céline Harbane — CDP & Dev Shopify · Paris</p>
+  <a href="/blog/" style="color:var(--accent);font-size:0.78rem">← Retour au blog</a>
+</footer>
+</body>
+</html>

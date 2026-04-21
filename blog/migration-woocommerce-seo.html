@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Migrer de WooCommerce vers Shopify sans perdre son SEO | Céline Harbane</title>
+<meta name="description" content="Comment migrer de WooCommerce vers Shopify sans perdre ses positions Google ? Guide complet sur les redirections 301 et la preservation du SEO.">
+<link rel="canonical" href="https://celine-harbane-cheffe-de-projet-et.vercel.app/blog/migration-woocommerce-seo.html">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060608;--text:#f0eeea;--muted:#8a8a9a;--accent:#3b82f6;--font-display:'Bebas Neue',sans-serif;--font-body:'DM Sans',sans-serif}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);font-size:16px;line-height:1.6}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+nav{padding:1.5rem 6vw;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.06)}
+.nav-logo{font-family:var(--font-display);font-size:1.4rem;letter-spacing:0.35em;color:var(--text);text-decoration:none}
+.nav-links{display:flex;gap:2rem;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase}
+.nav-links a{color:var(--text)}.nav-links a:hover{color:var(--accent);text-decoration:none}
+.nav-cta{font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.55rem 1.2rem;border:1px solid rgba(59,130,246,0.5);color:var(--text);transition:background 0.3s;text-decoration:none}
+.nav-cta:hover{background:var(--accent)}
+.article-wrap{max-width:760px;margin:0 auto;padding:4rem 2rem 6rem}
+.article-back{font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);display:inline-flex;align-items:center;gap:0.4rem;margin-bottom:2.5rem;text-decoration:none}
+.article-back:hover{color:var(--accent);text-decoration:none}
+.article-tag{font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem}
+h1{font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);line-height:1;letter-spacing:0.02em;margin-bottom:1.5rem}
+.article-meta{font-size:0.75rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.07);margin-bottom:2.5rem}
+.article-intro{font-size:1.1rem;color:rgba(255,255,255,0.8);line-height:1.75;margin-bottom:2.5rem;font-weight:300}
+h2{font-family:var(--font-display);font-size:1.8rem;letter-spacing:0.04em;margin:2.5rem 0 1rem;color:var(--text)}
+h3{font-size:1rem;font-weight:700;margin:1.75rem 0 0.75rem;color:var(--text)}
+p{color:var(--muted);line-height:1.8;margin-bottom:1.25rem}
+ul,ol{color:var(--muted);line-height:1.8;margin-bottom:1.25rem;padding-left:1.5rem}
+li{margin-bottom:0.4rem}
+.highlight-box{background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.25);padding:1.5rem 2rem;border-radius:4px;margin:2rem 0}
+.highlight-box p{color:rgba(255,255,255,0.75);margin:0}
+.warning-box{background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.25);padding:1.5rem 2rem;border-radius:4px;margin:2rem 0}
+.warning-box p{color:rgba(255,255,255,0.75);margin:0}
+.cta-box{background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.35);padding:2.5rem;border-radius:4px;margin:3rem 0;text-align:center}
+.cta-box h3{font-family:var(--font-display);font-size:1.6rem;color:var(--text);margin:0 0 0.75rem}
+.cta-box p{color:rgba(255,255,255,0.65);margin-bottom:1.5rem}
+.cta-btn{display:inline-block;background:var(--accent);color:#fff;padding:0.75rem 2rem;font-size:0.82rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:700;transition:background 0.3s;text-decoration:none}
+.cta-btn:hover{background:#2563eb;text-decoration:none}
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:0.85rem}
+th{background:rgba(255,255,255,0.06);color:var(--text);font-weight:700;padding:0.75rem 1rem;text-align:left;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase}
+td{padding:0.75rem 1rem;border-bottom:1px solid rgba(255,255,255,0.06);color:var(--muted)}
+.breadcrumb{font-size:0.72rem;color:var(--muted);padding:1rem 6vw;letter-spacing:0.05em}
+.breadcrumb a{color:var(--muted)}.breadcrumb a:hover{color:var(--accent);text-decoration:none}
+footer{padding:2rem 6vw;border-top:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+footer p{color:var(--muted);font-size:0.78rem}
+@media(max-width:600px){.nav-links{display:none}.article-wrap{padding:2rem 1.25rem 4rem}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="nav-logo" href="/">CH</a>
+  <div class="nav-links">
+    <a href="/#services">Services</a>
+    <a href="/#work">Projets</a>
+    <a href="/blog/">Blog</a>
+    <a href="/#contact">Contact</a>
+  </div>
+  <a class="nav-cta" href="https://wa.me/33666461363?text=Bonjour%20C%C3%A9line" target="_blank">Devis gratuit</a>
+</nav>
+<div class="breadcrumb"><a href="/">Accueil</a> › <a href="/blog/">Blog</a> › Migrer de WooCommerce vers Shopify sans perdre son SEO</div>
+<div class="article-wrap">
+  <a class="article-back" href="/blog/">← Retour au blog</a>
+
+  <div class="article-tag">WooCommerce · SEO</div>
+  <h1>MIGRER DE WOOCOMMERCE VERS SHOPIFY SANS PERDRE SON SEO</h1>
+  <div class="article-meta">Céline Harbane · Avril 2025 · 10 min de lecture</div>
+
+  <p class="article-intro">La peur de perdre ses positions Google est la première raison pour laquelle les e-commerçants repoussent leur migration. C'est une peur légitime. Une migration mal exécutée peut faire chuter votre trafic organique de 40 à 70 % en quelques semaines. Bien exécutée, elle peut même améliorer votre SEO. Voici comment.</p>
+
+  <h2>POURQUOI LE SEO EST À RISQUE LORS D'UNE MIGRATION</h2>
+  <p>Quand vous migrez de WooCommerce vers Shopify, vos URLs changent. WooCommerce génère des URLs du type <code>/produit/nom-du-produit/</code> ou <code>/boutique/categorie/produit/</code>. Shopify utilise une structure fixe : <code>/products/nom-du-produit</code> et <code>/collections/nom-collection</code>. Sans redirections, Google arrive sur des pages 404 — et retransmet votre "jus SEO" vers le vide.</p>
+  <p>Le deuxième risque : les métadonnées (balises title, meta description, balises alt des images) qui disparaissent dans la migration si elles ne sont pas soigneusement exportées et réimportées. Et enfin : le maillage interne, les liens entre vos pages, qui peut être brisé si les URLs changent sans plan de redirection global.</p>
+
+  <div class="warning-box">
+    <p><strong>Le piège classique :</strong> Migrer les données produits via CSV simple sans exporter les métadonnées SEO. Résultat : des centaines de pages sans balises title ni description, et un score SEO qui s'effondre en 4 à 8 semaines. Je l'ai vu arriver sur 3 boutiques que j'ai "sauvées" après une migration bâclée par un prestataire non spécialisé.</p>
+  </div>
+
+  <h2>ÉTAPE 1 : L'AUDIT SEO AVANT MIGRATION</h2>
+  <p>Avant de toucher quoi que ce soit, on photographie l'existant. C'est la base de tout.</p>
+
+  <h3>Export complet des URLs WooCommerce</h3>
+  <p>Utilisez Screaming Frog (version gratuite jusqu'à 500 URLs, payante au-delà) pour crawler votre site WooCommerce et exporter l'intégralité des URLs actives avec leurs métadonnées associées : title, description, H1, balises canonical, statut HTTP. Ce fichier sera votre référence tout au long du projet.</p>
+
+  <h3>Relevé des positions Google actuelles</h3>
+  <p>Exportez vos données depuis Google Search Console (Performances > Requêtes) pour les 3 derniers mois. Notez les 50 pages qui génèrent le plus d'impressions et de clics. Ce sont vos pages stratégiques — elles auront une attention particulière lors de la migration.</p>
+
+  <h3>Inventaire du netlinking entrant</h3>
+  <p>Via Ahrefs, Semrush ou Google Search Console (Liens > Liens externes les plus importants), identifiez les pages qui reçoivent des backlinks. Ces URLs doivent impérativement être redirigées vers leur équivalent Shopify — perdre un backlink, c'est perdre de l'autorité de domaine.</p>
+
+  <h2>ÉTAPE 2 : LA CARTOGRAPHIE DES REDIRECTIONS 301</h2>
+  <p>C'est l'étape la plus technique et la plus critique. On crée un fichier de mapping qui associe chaque ancienne URL WooCommerce à sa nouvelle URL Shopify. Ce fichier prend la forme d'un tableur à deux colonnes :</p>
+  <ul>
+    <li>Colonne A : ancienne URL (ex: <code>/produit/robe-fleurie-ete/</code>)</li>
+    <li>Colonne B : nouvelle URL Shopify (ex: <code>/products/robe-fleurie-ete</code>)</li>
+  </ul>
+  <p>Pour un catalogue de 200 produits, ce mapping peut représenter 400 à 600 lignes en tenant compte des produits, catégories, pages et articles de blog. Il se fait en partie automatiquement (les slugs restent souvent identiques) et en partie manuellement pour les cas particuliers.</p>
+
+  <div class="highlight-box">
+    <p><strong>Outil recommandé :</strong> Shopify permet d'importer les redirections en masse via un fichier CSV dans Boutique en ligne > Navigation > Redirections URL. Pour les projets de grande envergure, l'app "Easy Redirects" automatise et vérifie l'intégrité des redirections.</p>
+  </div>
+
+  <h2>ÉTAPE 3 : MIGRATION DES MÉTADONNÉES SEO</h2>
+  <p>Shopify stocke les métadonnées SEO dans des champs dédiés pour chaque produit, collection et page. Lors de l'import CSV via Matrixify (l'outil de migration de référence), vous pouvez inclure les colonnes suivantes pour préserver votre SEO :</p>
+  <ul>
+    <li><code>SEO Title</code> : la balise title de la page produit</li>
+    <li><code>SEO Description</code> : la meta description</li>
+    <li><code>URL Handle</code> : le slug de l'URL (gardez-le identique à WooCommerce si possible)</li>
+    <li><code>Image Alt Text</code> : les balises alt des images produits</li>
+  </ul>
+  <p>Si vos métadonnées WooCommerce étaient gérées par Yoast SEO, exportez-les via le plugin "WP All Export" en sélectionnant les champs Yoast (_yoast_wpseo_title, _yoast_wpseo_metadesc) dans l'export des posts.</p>
+
+  <h2>ÉTAPE 4 : CONFIGURATION SEO SUR SHOPIFY</h2>
+
+  <h3>Le sitemap automatique</h3>
+  <p>Shopify génère automatiquement un sitemap XML disponible à l'adresse <code>votreboutique.com/sitemap.xml</code>. Il inclut les produits, collections, articles de blog et pages. Après migration, soumettez ce sitemap dans Google Search Console pour accélérer l'indexation.</p>
+
+  <h3>Les balises canonical</h3>
+  <p>Shopify gère automatiquement les balises canonical pour éviter le contenu dupliqué (notamment entre les URLs de collection et les URLs directes de produits). Vérifiez que le thème Shopify choisi n'écrase pas ces balises — certains thèmes tiers mal codés le font.</p>
+
+  <h3>Les données structurées Schema.org</h3>
+  <p>La majorité des thèmes Shopify modernes (Dawn, Impulse, Prestige) incluent nativement les données structurées Product schema.org, ce qui améliore l'affichage dans les résultats Google (prix, disponibilité, avis). Vérifiez leur présence avec l'outil de test des données structurées de Google.</p>
+
+  <h2>ÉTAPE 5 : VÉRIFICATION POST-MIGRATION</h2>
+  <p>La migration est faite. La boutique Shopify est en ligne. Voici les vérifications à réaliser dans les 48 premières heures :</p>
+  <ol>
+    <li>Recrawler le nouveau site avec Screaming Frog pour détecter les 404 résiduelles</li>
+    <li>Vérifier les redirections sur un échantillon de 50 URLs stratégiques</li>
+    <li>Contrôler Google Search Console : soumission du nouveau sitemap, suppression de l'ancien</li>
+    <li>Vérifier que les balises title et meta description sont présentes sur les pages prioritaires</li>
+    <li>Tester les liens internes depuis la navigation, les fiches produits et les articles de blog</li>
+  </ol>
+
+  <div class="highlight-box">
+    <p><strong>Suivi dans le temps :</strong> Attendez-vous à une légère fluctuation de vos positions pendant les 2 à 4 semaines suivant la migration, le temps que Google recrawle et réindexe l'ensemble des pages. C'est normal. Si au bout de 6 semaines vos positions ne sont pas revenues au niveau d'avant migration, c'est qu'il y a un problème à investiguer — et j'interviens en diagnostic.</p>
+  </div>
+
+  <h2>LE BONUS : SHOPIFY PEUT AMÉLIORER VOTRE SEO</h2>
+  <p>Une migration bien exécutée vers Shopify n'est pas neutre SEO — elle peut être positive. Les raisons : temps de chargement divisé par 2 à 3 (impact direct sur les Core Web Vitals), HTTPS natif sans configuration, CDN mondial qui améliore les performances pour les visiteurs étrangers, et une architecture technique plus propre qui facilite le crawl de Google.</p>
+  <p>Plusieurs de mes clients ont vu leur trafic organique progresser de 15 à 30 % dans les 3 mois suivant une migration bien gérée, notamment grâce à l'amélioration du score PageSpeed mobile.</p>
+
+  <div class="cta-box">
+    <h3>VOTRE PROJET DE MIGRATION ?</h3>
+    <p>Devis gratuit sous 48h. Je réponds à toutes vos questions sans engagement.</p>
+    <a class="cta-btn" href="https://wa.me/33666461363?text=Bonjour%20C%C3%A9line" target="_blank">Me contacter sur WhatsApp →</a>
+  </div>
+</div>
+<footer>
+  <p>© 2025 Céline Harbane — CDP & Dev Shopify · Paris</p>
+  <a href="/blog/" style="color:var(--accent);font-size:0.78rem">← Retour au blog</a>
+</footer>
+</body>
+</html>
