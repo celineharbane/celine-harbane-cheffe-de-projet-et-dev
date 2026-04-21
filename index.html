@@ -1025,9 +1025,13 @@ html {
       <span class="line" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0%);">BIEN LIVRÉ.</span>
     </h1>
     <p class="hero-sub" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px); opacity: 1;">CDP + Dev Shopify en une seule personne.<br>Je lance ou migre votre boutique e-commerce — sans friction, dans les délais.</p>
+    <div style="display:inline-flex;align-items:center;gap:0.5rem;margin-bottom:1.5rem;padding:0.4rem 1rem;border-radius:100px;background:rgba(39,201,71,0.1);border:1px solid rgba(39,201,71,0.35);">
+      <span style="width:7px;height:7px;border-radius:50%;background:#27c93f;display:block;animation:pulse-dot 2s ease-in-out infinite;"></span>
+      <span style="font-size:0.72rem;color:#27c93f;letter-spacing:0.1em;font-weight:700;text-transform:uppercase;">Disponible — 2 créneaux ouverts en mai 2026</span>
+    </div>
     <div class="hero-cta-wrap" style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px); opacity: 1;">
-      <a class="btn-primary magnetic" href="#work">Démarrer mon projet</a>
-      <a class="btn-ghost magnetic" href="#about">Découvrir mes services</a>
+      <a class="btn-primary magnetic" href="#contact">Devis gratuit en 48h</a>
+      <a class="btn-ghost magnetic" href="#work">Voir mes réalisations</a>
     </div><div class="hero-trust" style="display:flex;align-items:center;gap:2rem;margin-top:2.5rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,0.12);flex-wrap:wrap;">
     <div style="display:flex;align-items:center;gap:0.5rem;">
       <span style="font-size:0.72rem;color:rgba(255,255,255,0.75);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;">Ils m'ont fait confiance</span>
@@ -1476,6 +1480,101 @@ html {
     </div>
   </section>
 
+<style>
+/* Pourquoi moi */
+.s-why{padding:5rem 10vw;position:relative;z-index:10;background:rgba(75,123,245,0.03);border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06)}
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:3rem}
+.why-card{padding:2rem 1.5rem;border-left:2px solid rgba(75,123,245,0.3);transition:border-color 0.3s}
+.why-card:hover{border-color:var(--accent)}
+.why-num{font-family:var(--font-display);font-size:2.5rem;color:rgba(75,123,245,0.2);line-height:1;margin-bottom:0.75rem}
+.why-title{font-size:0.95rem;font-weight:700;color:#fff;margin-bottom:0.6rem;line-height:1.3}
+.why-desc{font-size:0.8rem;color:var(--muted);line-height:1.6}
+@media(max-width:900px){.why-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.why-grid{grid-template-columns:1fr}}
+
+/* FAQ */
+.s-faq{padding:6rem 10vw;position:relative;z-index:10}
+.faq-list{margin-top:3rem;max-width:760px}
+.faq-item{border-bottom:1px solid rgba(255,255,255,0.07);overflow:hidden}
+.faq-q{width:100%;background:none;border:none;color:#fff;font-family:var(--font-body);font-size:1rem;font-weight:600;text-align:left;padding:1.4rem 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:1rem;letter-spacing:0.01em}
+.faq-q:hover{color:var(--accent)}
+.faq-icon{font-size:1.2rem;color:var(--accent);flex-shrink:0;transition:transform 0.3s}
+.faq-item.open .faq-icon{transform:rotate(45deg)}
+.faq-a{font-size:0.88rem;color:var(--muted);line-height:1.75;max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.3s}
+.faq-item.open .faq-a{max-height:300px;padding-bottom:1.5rem}
+
+/* Sticky CTA */
+.sticky-cta{position:fixed;bottom:0;left:0;right:0;z-index:9000;background:rgba(6,6,8,0.92);backdrop-filter:blur(12px);border-top:1px solid rgba(75,123,245,0.25);padding:0.9rem 5vw;display:flex;align-items:center;justify-content:space-between;gap:1rem;transform:translateY(100%);transition:transform 0.5s cubic-bezier(0.23,1,0.32,1)}
+.sticky-cta.visible{transform:translateY(0)}
+.sticky-cta-text{font-size:0.85rem;color:rgba(255,255,255,0.7);display:flex;align-items:center;gap:0.6rem}
+.sticky-cta-text strong{color:#fff;font-weight:700}
+.sticky-dot{width:7px;height:7px;border-radius:50%;background:#27c93f;flex-shrink:0;animation:pulse-dot 2s ease-in-out infinite}
+.sticky-cta-actions{display:flex;gap:0.75rem;flex-shrink:0}
+.sticky-btn{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.55rem 1.2rem;border-radius:3px;text-decoration:none;font-weight:700;transition:all 0.25s}
+.sticky-btn-primary{background:var(--accent);color:#fff;border:1px solid var(--accent)}
+.sticky-btn-primary:hover{background:#2563eb}
+.sticky-btn-secondary{border:1px solid rgba(255,255,255,0.2);color:#fff}
+.sticky-btn-secondary:hover{border-color:#25D366;color:#25D366}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+@media(max-width:600px){.sticky-cta-text{display:none}.sticky-cta{justify-content:center}}
+</style>
+
+<!-- POURQUOI MOI -->
+<section class="s-why" aria-label="Pourquoi choisir Céline Harbane" role="region">
+  <div class="section-tag">Pourquoi moi ?</div>
+  <h2 class="section-title">Une seule personne,<br><span style="-webkit-text-stroke:1.5px #4B7BF5;color:transparent;">tout le projet.</span></h2>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-num">01</div>
+      <div class="why-title">CDP + Dev en une seule interlocutrice</div>
+      <div class="why-desc">Pas d'agence, pas d'intermédiaire. Je pilote et je code — vous n'avez qu'un seul contact du brief à la mise en ligne.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-num">02</div>
+      <div class="why-title">Spécialisée PME, pas grands comptes</div>
+      <div class="why-desc">Je travaille exclusivement avec des PME. Je comprends vos contraintes de budget, de délais et de ressources.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-num">03</div>
+      <div class="why-title">40+ boutiques livrées, 0 abandon</div>
+      <div class="why-desc">Chaque projet que je commence, je le livre. Délais tenus, données préservées, client informé à chaque étape.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-num">04</div>
+      <div class="why-title">Devis gratuit sous 48h</div>
+      <div class="why-desc">Vous partagez votre projet, je vous reviens avec une analyse concrète et une estimation claire — sans engagement.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="s-faq" aria-label="Questions fréquentes" role="region">
+  <div class="section-tag">FAQ</div>
+  <h2 class="section-title">Vos questions,<br><span style="-webkit-text-stroke:1.5px #4B7BF5;color:transparent;">mes réponses.</span></h2>
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-q">Quel est le budget moyen pour une boutique Shopify ?<span class="faq-icon">+</span></button>
+      <div class="faq-a">Une boutique Shopify sur mesure pour une PME démarre généralement entre 2 500 € et 6 000 € selon le périmètre (nombre de produits, intégrations, design). Je fournis toujours un devis détaillé et transparent avant de démarrer.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Combien de temps prend une migration vers Shopify ?<span class="faq-icon">+</span></button>
+      <div class="faq-a">En moyenne 4 à 8 semaines selon la volumétrie de votre catalogue et la complexité de l'existant. La migration se fait sans interruption de votre boutique actuelle — la bascule est planifiée sur un créneau défini avec vous.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Je n'ai pas de cahier des charges, est-ce un problème ?<span class="faq-icon">+</span></button>
+      <div class="faq-a">Pas du tout. La rédaction du cahier des charges fait partie de mes missions CDP. Vous m'expliquez votre activité et vos objectifs — je traduis ça en specs techniques et fonctionnelles.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Vous intervenez en dehors de Paris ?<span class="faq-icon">+</span></button>
+      <div class="faq-a">Oui, je travaille avec des PME partout en France (et en Europe) en 100% remote. Les échanges se font par visio, email et WhatsApp selon votre préférence.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Que se passe-t-il après la livraison ?<span class="faq-icon">+</span></button>
+      <div class="faq-a">Je propose une période de garantie et des accompagnements mensuels (maintenance, évolutions, SEO). Vous n'êtes jamais laissé seul après la mise en ligne.</div>
+    </div>
+  </div>
+</section>
+
   <section class="s-contact" id="contact" aria-label="Contactez Céline Harbane" role="region">
     <div class="section-tag" style="justify-content: center; translate: none; rotate: none; scale: none; opacity: 1; transform: translate(0px, 0px);">— Contact</div>
     <h2 class="contact-title" style="line-height: 1.05; display: block; margin-bottom: 1.5rem; opacity: 1; transform: translate(0px, 0px);"><span style="display: block; color: rgb(255, 255, 255); margin-bottom: 0.1em;">PARLONS DE</span><span style="display: block; -webkit-text-stroke: 1.5px rgb(75, 123, 245); color: transparent;">VOTRE PROJET</span></h2>
@@ -1641,4 +1740,34 @@ if(!('ontouchstart' in window)){
 </script>
 
 
+<!-- STICKY CTA BAR -->
+<div class="sticky-cta" id="stickyCta">
+  <div class="sticky-cta-text">
+    <span class="sticky-dot"></span>
+    <span><strong>Céline Harbane</strong> — Disponible pour votre projet Shopify</span>
+  </div>
+  <div class="sticky-cta-actions">
+    <a href="mailto:harbaneceline@gmail.com" class="sticky-btn sticky-btn-secondary">✉ Email</a>
+    <a href="https://wa.me/33666461363?text=Bonjour%20C%C3%A9line%2C%20j%27aimerais%20discuter%20de%20mon%20projet%20Shopify" target="_blank" rel="noopener" class="sticky-btn sticky-btn-primary">💬 WhatsApp — Devis gratuit</a>
+  </div>
+</div>
+
+<script>
+// Sticky CTA — apparaît après 300px de scroll
+const stickyCta = document.getElementById('stickyCta');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 300) stickyCta.classList.add('visible');
+  else stickyCta.classList.remove('visible');
+}, { passive: true });
+
+// FAQ accordion
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  });
+});
+</script>
 </body></html>
